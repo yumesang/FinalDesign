@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="FinalDesign"
+  id="myeclipse.1505706220839"
+  context-root="/jeecg"
+  j2ee-spec="5.0"
+  archive="FinalDesign.war">
+  <attributes>
+    <attribute name="webrootdir" value="/WebRoot" />
+  </attributes>
+</project-module>
+
