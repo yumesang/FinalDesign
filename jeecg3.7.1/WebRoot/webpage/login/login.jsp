@@ -89,12 +89,12 @@
 									<i class="ace-icon fa fa-lock"></i>
 								</span>
                       </label>
-                      <label class="block clearfix">
+                     <!--  <label class="block clearfix">
                         <div class="input-group">
                           <input type="text" style="width:150px" name="randCode" class="form-control" placeholder="请输入验证码"  id="randCode"/>
                           <span class="input-group-addon" style="padding: 0px;"><img id="randCodeImage" src="randCodeImage"  /></span>
                         </div>
-                      </label>
+                      </label> -->
                       <div class="space"></div>
                       <div class="clearfix">
                         <label class="inline">
@@ -192,10 +192,6 @@
       return false;
     }
 
-    if($.trim($("#randCode").val()).length==0){
-      showErrorMsg("请输入验证码");
-      return false;
-    }
     return true;
   }
 
@@ -279,8 +275,8 @@
        } else {
 			showErrorMsg(d.msg);
 
-		  	if(d.msg === "用户名或密码错误" || d.msg === "验证码错误")
-		  		reloadRandCodeImage();
+		  /* 	if(d.msg === "用户名或密码错误" || d.msg === "验证码错误")
+		  		reloadRandCodeImage(); */
 
         }
       }
@@ -295,14 +291,14 @@
   /**
    * 刷新验证码
    */
-$('#randCodeImage').click(function(){
+/* $('#randCodeImage').click(function(){
     reloadRandCodeImage();
 });
 function reloadRandCodeImage() {
     var date = new Date();
     var img = document.getElementById("randCodeImage");
     img.src='randCodeImage?a=' + date.getTime();
-}
+} */
 
   function darkStyle(){
     $('body').attr('class', 'login-layout');
@@ -362,7 +358,7 @@ function reloadRandCodeImage() {
   	{
   		$("#on_off").attr("checked", false);
   		$("#on_off").val("0");
-        $("#randCode").focus();
+/*         $("#randCode").focus(); */
   	}
   }
 </script>

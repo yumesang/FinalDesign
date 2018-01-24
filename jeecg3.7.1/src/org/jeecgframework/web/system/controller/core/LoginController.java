@@ -112,14 +112,7 @@ public class LoginController extends BaseController{
 
 		
 		//验证码
-		String randCode = req.getParameter("randCode");
-		if (StringUtils.isEmpty(randCode)) {
-			j.setMsg(mutiLangService.getLang("common.enter.verifycode"));
-			j.setSuccess(false);
-		} else if (!randCode.equalsIgnoreCase(String.valueOf(session.getAttribute("randCode")))) {
-			j.setMsg(mutiLangService.getLang("common.verifycode.error"));
-			j.setSuccess(false);
-		} else if (isInBlackList(IpUtil.getIpAddr(req))){
+		if (isInBlackList(IpUtil.getIpAddr(req))){
 			j.setMsg(mutiLangService.getLang("common.blacklist.error"));
 			j.setSuccess(false);
 		}
@@ -226,7 +219,7 @@ public class LoginController extends BaseController{
 			session.invalidate();
 			session = req.getSession(true);//session初始化
 			session.setAttribute(ResourceUtil.LOCAL_CLINET_USER, user);
-			session.setAttribute("randCode",req.getParameter("randCode"));//保存验证码
+			//session.setAttribute("randCode",req.getParameter("randCode"));//保存验证码
 			checkuser(user,req);
 		}
 
