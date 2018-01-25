@@ -70,7 +70,7 @@
                         </ul>
                          //update-end--Author: chenj Date:20160726 for: TASK #1207 [改造]h+风格下，去掉logo下面的内容，迁移位置到右上角，主题位置 --%>
                     </div>
-                    <div class="logo-element">JEECG
+                    <div class="logo-element">Mega
                     </div>
                 </li>
 
@@ -87,7 +87,7 @@
                 <div class="navbar-header" style="height: 60px;"><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
                     <form role="search" class="navbar-form-custom" method="post" action="search_results.html">
                         <div class="form-group">
-                            <input type="text" placeholder="欢迎使用Jeecg快速开发平台 …" class="form-control" name="top-search" id="top-search">
+                            <input type="text" placeholder="欢迎使用带权教务系统测试版" class="form-control" name="top-search" id="top-search">
                         </div>
                     </form>
                 </div>

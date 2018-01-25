@@ -519,6 +519,20 @@ public class LoginController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(params = "hplushome")
+	public ModelAndView hplusindex(HttpServletRequest request) {
+
+		SysThemesEnum sysTheme = SysThemesUtil.getSysTheme(request);
+		//ACE ACE2 DIY时需要在home.jsp头部引入依赖的js及css文件
+		/*if("ace".equals(sysTheme.getStyle())||"diy".equals(sysTheme.getStyle())||"acele".equals(sysTheme.getStyle())){
+			request.setAttribute("show", "1");
+		} else {//default及shortcut不需要引入依赖文件，所有需要屏蔽
+			request.setAttribute("show", "0");
+		}*/
+
+		return new ModelAndView("main/hplusindex");
+	}
+	
+	@RequestMapping(params = "hplushome2")
 	public ModelAndView hplushome(HttpServletRequest request) {
 
 		SysThemesEnum sysTheme = SysThemesUtil.getSysTheme(request);
@@ -531,6 +545,7 @@ public class LoginController extends BaseController{
 
 		return new ModelAndView("main/hplushome");
 	}
+	
 	/**
 	 * 无权限页面提示跳转
 	 * 

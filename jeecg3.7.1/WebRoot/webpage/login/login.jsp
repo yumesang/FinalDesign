@@ -51,9 +51,9 @@
           <div class="center">
             <h1 id="id-text2" class="grey">
               <i class="ace-icon fa fa-leaf green"></i>
-               JEECG 演示系统
+               带权教务系统
             </h1>
-            <h4 class="blue" id="id-company-text">www.jeecg.org</h4>
+            <h4 class="blue" id="id-company-text">制作:Mega B2014103101</h4>
           </div>
           <div class="space-6"></div>
           <div class="position-relative">
@@ -121,7 +121,7 @@
                 </form>
               </div>
             </div>
-            <div class="center"><h4 class="blue" id="id-company-text">&copy; JEECG版权所有 v_3.7.1</h4></div>
+            <div class="center"><h4 class="blue" id="id-company-text">&copy; 系统版本:V_0.2.0</h4></div>
             <div class="navbar-fixed-top align-right">
               <br />
               &nbsp;

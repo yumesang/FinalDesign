@@ -10,7 +10,7 @@
     <!--360浏览器优先以webkit内核解析-->
 
 
-    <title>Jeecg 微云快速开发平台</title>
+    <title>教务系统测试版</title>
 
     <link rel="shortcut icon" href="images/favicon.ico">
     <link href="plug-in-ui/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
@@ -25,21 +25,17 @@
 <body class="gray-bg">
 <div class="row  border-bottom white-bg dashboard-header">
     <div class="col-sm-12">
-        <blockquote class="text-warning" style="font-size:14px">您是否需要一款企业级J2EE快速开发平台，提高开发效率，缩短项目周期…
-            <br>您是否一直在苦苦寻找一款强大的代码生成器，节省码农的繁琐重复工作…
-            <br>您是否想拥有移动报表能力、自定义表单设计能力、插件开发能力(可插拔)、工作流配置能力…
-            <br>…………
-            <h4 class="text-danger">那么，现在Jeecg来了</h4>
+        <blockquote class="text-warning" style="font-size:14px">欢迎登陆带权教务系统测试版！
+            <br>此系统基于Jeecg开源框架设计
+            <br>支持简单工作流，在线表单模板浏览、下载、导入、导出
+            <br>更多功能正在开发中......
+            <h4 class="text-danger">制作:Mega</h4>
         </blockquote>
         <hr>
     </div>
     <div class="col-sm-3">
-        <h2>Hello,Guest</h2>
-        <small>移动设备访问请扫描以下二维码：</small>
-        <br>
-        <br>
-        <img src="plug-in/login/images/jeecg.jpg" width="100%" style="max-width:264px;">
-        <br>
+        <h2>开发者QQ</h2>
+        <img src="plug-in/login/images/QQ.png" width="100%" style="max-width:264px;">
     </div>
     <div class="col-sm-5">
         <h2>
