@@ -1,9 +1,12 @@
 package com.finalDesign.basenews.controller;
 import com.finalDesign.basenews.entity.BaseNewsEntity;
 import com.finalDesign.basenews.service.BaseNewsServiceI;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.text.SimpleDateFormat;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,7 +17,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import org.jeecgframework.core.common.controller.BaseController;
 import org.jeecgframework.core.common.exception.BusinessException;
 import org.jeecgframework.core.common.hibernate.qbc.CriteriaQuery;
@@ -25,10 +27,12 @@ import org.jeecgframework.core.constant.Globals;
 import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.tag.core.easyui.TagUtil;
 import org.jeecgframework.web.system.pojo.base.TSDepart;
+import org.jeecgframework.web.system.pojo.base.TSUser;
 import org.jeecgframework.web.system.service.SystemService;
 import org.jeecgframework.core.util.MyBeanUtils;
 
 import java.io.OutputStream;
+
 import org.jeecgframework.core.util.BrowserUtils;
 import org.jeecgframework.poi.excel.ExcelExportUtil;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
@@ -39,14 +43,17 @@ import org.jeecgframework.poi.excel.entity.vo.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.vo.TemplateExcelConstants;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.jeecgframework.core.util.ResourceUtil;
+
 import java.io.IOException;
+
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import java.util.Map;
 import java.util.HashMap;
-import org.jeecgframework.core.util.ExceptionUtil;
 
+import org.jeecgframework.core.util.ExceptionUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,10 +65,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.jeecgframework.core.beanvalidator.BeanValidators;
+
 import java.util.Set;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+
 import java.net.URI;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -98,6 +109,14 @@ public class BaseNewsController extends BaseController {
 	@RequestMapping(params = "list")
 	public ModelAndView list(HttpServletRequest request) {
 		return new ModelAndView("com/finalDesign/basenews/baseNewsList");
+	}
+	
+	@RequestMapping(params = "previewList")
+	public ModelAndView previewList(HttpServletRequest request,String id, String introduction) {
+		request.setAttribute("introduction", introduction);
+		request.setAttribute("contents", systemService.findListbySql("select t.contents from base_news t where id = '"+ id +"'").get(0));
+		systemService.executeSql("update base_news set read_count = (read_count+1) where id = '"+ id +"'");
+		return new ModelAndView("com/finalDesign/basenews/previewList");
 	}
 
 	/**
@@ -189,7 +208,14 @@ public class BaseNewsController extends BaseController {
 		String message = null;
 		AjaxJson j = new AjaxJson();
 		message = "base_news添加成功";
+		Calendar date =  Calendar.getInstance();
 		try{
+			baseNews.setCreateUserId(ResourceUtil.getSessionUser().getId());
+			baseNews.setCreateUserName(ResourceUtil.getSessionUser().getUserName());
+			baseNews.setCreateDate(date.getTime());
+			baseNews.setDepartId(ResourceUtil.getSessionUser().getCurrentDepart().getId());
+			baseNews.setDepartName(ResourceUtil.getSessionUser().getCurrentDepart().getDepartname());	
+			baseNews.setReadCount(0);
 			baseNewsService.save(baseNews);
 			systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}catch(Exception e){
@@ -213,9 +239,13 @@ public class BaseNewsController extends BaseController {
 		String message = null;
 		AjaxJson j = new AjaxJson();
 		message = "base_news更新成功";
+		Calendar date =  Calendar.getInstance();
 		BaseNewsEntity t = baseNewsService.get(BaseNewsEntity.class, baseNews.getId());
 		try {
 			MyBeanUtils.copyBeanNotNull2Bean(baseNews, t);
+			t.setModifyUserId(ResourceUtil.getSessionUser().getId());
+			t.setModifyUserName(ResourceUtil.getSessionUser().getUserName());
+			t.setModifyDate(date.getTime());
 			baseNewsService.saveOrUpdate(t);
 			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 		} catch (Exception e) {

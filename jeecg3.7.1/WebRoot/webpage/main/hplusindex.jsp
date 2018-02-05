@@ -332,7 +332,7 @@
  	}
  	function baseNews(){ 		
  		var title = "通知公告";
- 		addOneTab(title, "");
+ 		addOneTab(title, "baseNewsController.do?list");
  	}
  	function readMore(){
  		var title = "待办事宜";

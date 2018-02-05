@@ -528,7 +528,25 @@ public class LoginController extends BaseController{
 		} else {//default及shortcut不需要引入依赖文件，所有需要屏蔽
 			request.setAttribute("show", "0");
 		}*/
-
+		
+		
+		//通知公告栏
+				String sql = "select t.introduction as introduction, t.keywords as keywords, t.create_date as createdate, t.id from base_news t where t.news_type = '1' ORDER BY createdate DESC" ;
+				List<Object[]> list = systemService.findListbySql(sql);
+				String printWord = "<ol><li>";
+				for(int i = 0; i < list.size(); i++){
+					Object[] ob = list.get(i);
+					String id = ob[3].toString();
+					if(i == list.size()-1){
+						printWord = printWord + "<a onclick=\"showDetail( '"+ id +"', '"+ ob[0].toString() +"')\" href=\"#\">" + ob[0] + " " + ob[1] + " ("  + ob[2].toString().substring(0,10) + ")</a></li></ol>";
+					}else{
+						printWord = printWord + "<a onclick=\"showDetail( '"+ id +"', '"+ ob[0].toString() +"')\" href=\"#\">" + ob[0] + " " + ob[1] + " (" +  ob[2].toString().substring(0,10) + ")</a></li><li><a>";
+					}	
+				}
+				if(printWord.equals("<ol><li>")){
+					printWord = "暂无通知";
+				}
+		request.setAttribute("printWord", printWord);
 		return new ModelAndView("main/hplusindex");
 	}
 	
