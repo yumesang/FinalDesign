@@ -1,9 +1,12 @@
 package com.finalDesign.basetable.controller;
 import com.finalDesign.basetable.entity.BaseTableEntity;
 import com.finalDesign.basetable.service.BaseTableServiceI;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.text.SimpleDateFormat;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,7 +17,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import org.jeecgframework.core.common.controller.BaseController;
 import org.jeecgframework.core.common.exception.BusinessException;
 import org.jeecgframework.core.common.hibernate.qbc.CriteriaQuery;
@@ -29,6 +31,7 @@ import org.jeecgframework.web.system.service.SystemService;
 import org.jeecgframework.core.util.MyBeanUtils;
 
 import java.io.OutputStream;
+
 import org.jeecgframework.core.util.BrowserUtils;
 import org.jeecgframework.poi.excel.ExcelExportUtil;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
@@ -39,14 +42,17 @@ import org.jeecgframework.poi.excel.entity.vo.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.vo.TemplateExcelConstants;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.jeecgframework.core.util.ResourceUtil;
+
 import java.io.IOException;
+
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import java.util.Map;
 import java.util.HashMap;
-import org.jeecgframework.core.util.ExceptionUtil;
 
+import org.jeecgframework.core.util.ExceptionUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,10 +64,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.jeecgframework.core.beanvalidator.BeanValidators;
+
 import java.util.Set;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+
 import java.net.URI;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -190,6 +200,12 @@ public class BaseTableController extends BaseController {
 		AjaxJson j = new AjaxJson();
 		message = "base_table添加成功";
 		try{
+			if(baseTable.getSelfStringName() != ""){
+				baseTable.setEnable(true);
+			}
+			baseTable.setUseCount(0);
+			baseTable.setCreateUserId(ResourceUtil.getSessionUser().getId());
+			baseTable.setCreateUserName(ResourceUtil.getSessionUser().getUpdateBy());
 			baseTableService.save(baseTable);
 			systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}catch(Exception e){
@@ -211,10 +227,14 @@ public class BaseTableController extends BaseController {
 	@ResponseBody
 	public AjaxJson doUpdate(BaseTableEntity baseTable, HttpServletRequest request) {
 		String message = null;
+		Date date = new Date();
 		AjaxJson j = new AjaxJson();
 		message = "base_table更新成功";
 		BaseTableEntity t = baseTableService.get(BaseTableEntity.class, baseTable.getId());
-		try {
+		try {			
+			baseTable.setModifyDate(date);
+			baseTable.setModifyUserId(ResourceUtil.getSessionUser().getId());
+			baseTable.setModifyUserName(ResourceUtil.getSessionUser().getUpdateBy());
 			MyBeanUtils.copyBeanNotNull2Bean(baseTable, t);
 			baseTableService.saveOrUpdate(t);
 			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
@@ -250,6 +270,18 @@ public class BaseTableController extends BaseController {
 	public ModelAndView goUpdate(BaseTableEntity baseTable, HttpServletRequest req) {
 		if (StringUtil.isNotEmpty(baseTable.getId())) {
 			baseTable = baseTableService.getEntity(BaseTableEntity.class, baseTable.getId());
+			String[] selfStringNum = baseTable.getSelfString().split(",");	
+			String selfStringName = baseTable.getSelfStringName();
+			List<String> selfStringList = new ArrayList<String>();
+			for(String str:selfStringNum){
+				selfStringList.add(str);
+			}
+			String myselfStringList = String.valueOf(selfStringList).replace("[", "");
+			myselfStringList = String.valueOf(myselfStringList).replace("]", "");
+			
+			req.setAttribute("selfStringNum", selfStringNum.length);
+			req.setAttribute("selfStringList", myselfStringList);
+			req.setAttribute("selfStringName", selfStringName);
 			req.setAttribute("baseTablePage", baseTable);
 		}
 		return new ModelAndView("com/finalDesign/basetable/baseTable-update");

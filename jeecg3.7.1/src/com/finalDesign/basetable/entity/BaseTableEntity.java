@@ -94,7 +94,7 @@ public class BaseTableEntity implements java.io.Serializable {
 	private java.lang.String modifyUserName;
 	/**是否启用*/
 	@Excel(name="是否启用",width=15)
-	private java.lang.Double enable;
+	private java.lang.Boolean enable;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -462,7 +462,7 @@ public class BaseTableEntity implements java.io.Serializable {
 	 */
 
 	@Column(name ="ENABLE",nullable=true,length=1)
-	public java.lang.Double getEnable(){
+	public java.lang.Boolean getEnable(){
 		return this.enable;
 	}
 
@@ -470,7 +470,7 @@ public class BaseTableEntity implements java.io.Serializable {
 	 *方法: 设置java.lang.Double
 	 *@param: java.lang.Double  是否启用
 	 */
-	public void setEnable(java.lang.Double enable){
+	public void setEnable(java.lang.Boolean enable){
 		this.enable = enable;
 	}
 }

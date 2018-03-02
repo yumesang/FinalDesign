@@ -35,18 +35,18 @@
   	var str2 = "input[name='radioSelect"+ str.substring(11,str.length) +"']:checked";
   	var str3 = "#sizeSelect"+str.substring(11,str.length);  
   	var str4 = "#addChoose"+str.substring(11,str.length); 
-  	var str5 = "#selfString"+str.substring(11,str.length); 
+/*   	var str5 = "#selfString"+str.substring(11,str.length);  */
   	var check = $(str2).val();  	
   	if(check == "radio" || check == "checkBox"){ 
   		$(str3).attr("hidden","hidden");
   		$(str3).removeAttr("value");
   		$(str4).removeAttr("style");	
-  		str3 = "#selfString"+str.substring(11,str.length);	
-  		$(str3).attr("value",check);
+/*   		$(str5).attr("value",check); */
   	}else{	
   		$(str4).attr("style","display:none;");
   		$(str4).removeAttr("value");
   		$(str3).removeAttr("hidden");	
+/*   		$(str5).attr("value",check); */
   	}
   };
 
@@ -58,21 +58,25 @@
   	}else{
   		$("tr[name=selfStringList]").remove();
   		for(var i=0;i<str;i++){
-  			$("#lastRow").before("<tr name=\"selfStringList\"><td align=\"right\"><label class=\"Validform_label\">自定义字段"+ (i+1) +":</label></td><td class=\"value\"><input id=\"selfStringName"+(i+1)+"\" name=\"selfStringName\" type=\"text\" style=\"width: 150px\" class=\"inputxt\"  ignore=\"ignore\" /><span class=\"Validform_checktip\"></span><label class=\"Validform_label\" style=\"display: none;\" >自定义字段名"+(i+1)+"</label></td><td align=\"center\"><input name=\"radioSelect"+(i+1)+"\" type=\"radio\" onclick=\"selectType(name)\"  value=\"radio\" />单选框   <input name=\"radioSelect"+(i+1)+"\" type=\"radio\" onclick=\"selectType(name)\" value=\"checkBox\" />复选框   <input name=\"radioSelect"+(i+1)+"\" type=\"radio\" onclick=\"selectType(name)\" value=\"input\" />输入框      </td><td align=\"center\"><select id=\"sizeSelect"+ (i+1) +"\" name=\"sizeSelect"+ (i+1) +"\" hidden=\"hidden\" onchange=\"getSelfValue(name)\" ><option value=\"0\" selected=\"selected\" disabled=\"disabled\">框体高度</option><option value=\"small\">20px</option><option value=\"normal\">50px</option><option value=\"big\">200px</option><option value=\"biggest\">500px</option></select><input id=\"addChoose"+ (i+1) +"\" name=\"addChooses"+ (i+1) +"\" placeholder=\"输入选项以逗号(英)隔开\" style=\"display:none;\" onchange=\"getSelfValue(name)\" /><input id=\"selfString"+ (i+1) +"\" name=\"selfString\" style=\"display:none\" type=\"text\" /></td></tr>");
+  			$("#lastRow").before("<tr name=\"selfStringList\"><td align=\"right\"><label class=\"Validform_label\">自定义字段"+ (i+1) +":</label></td><td class=\"value\"><input id=\"selfStringName"+(i+1)+"\" name=\"selfStringName\" type=\"text\" style=\"width: 150px\" class=\"inputxt\"  ignore=\"ignore\" /><span class=\"Validform_checktip\"></span><label class=\"Validform_label\" style=\"display: none;\" >自定义字段名"+(i+1)+"</label></td><td align=\"center\"><input name=\"radioSelect"+(i+1)+"\" type=\"radio\" onclick=\"selectType(name)\"  value=\"radio\" />单选框   <input name=\"radioSelect"+(i+1)+"\" type=\"radio\" onclick=\"selectType(name)\" value=\"checkBox\" />复选框   <input name=\"radioSelect"+(i+1)+"\" type=\"radio\" onclick=\"selectType(name)\" value=\"input\" />输入框      </td><td align=\"center\"><select id=\"sizeSelect"+ (i+1) +"\" name=\"sizeSelect"+ (i+1) +"\" hidden=\"hidden\" onchange=\"getSelfValue(name)\" ><option value=\"0\" selected=\"selected\" disabled=\"disabled\">框体高度</option><option value=\"small\">20px</option><option value=\"normal\">50px</option><option value=\"big\">200px</option><option value=\"biggest\">500px</option></select><input id=\"addChoose"+ (i+1) +"\" name=\"addChooses"+ (i+1) +"\" type=\"text\" placeholder=\"输入选项以'-'隔开\" style=\"display:none;\" onchange=\"getSelfValue(name)\" /><input id=\"selfString"+ (i+1) +"\" name=\"selfString\" style=\"display:none\" type=\"text\" /></td></tr>");
   		}
   	}
  	};
  function getSelfValue(name){
  	var str = name;
- 	str1 = "input[name='radioSelect"+ str.substring(10,str.length) +"']:checked";
- 	str2 = "#selfString"+ str.substring(10,str.length);
- 	str3 = "#addChoose" + str.substring(10,str.length);
- 	str4 = "#sizeSelect" + str.substring(10,str.length);
+ 	var str1 = "input[name='radioSelect"+ str.substring(10,str.length) +"']:checked";
+ 	var str2 = "#selfString"+ str.substring(10,str.length);
+ 	var str3 = "#addChoose" + str.substring(10,str.length);
+ 	var str4 = "#sizeSelect" + str.substring(10,str.length);
  	var type = $(str1).val();
  	if(type == "radio" || type == "checkBox"){
-		alert($(str3).val());
+		var value = type+":"+$(str3).val();
+		$(str2).val(value);
+		alert($(str2).val());
  	}else{
- 		alert($(str4).val());
+ 		var value = type+":"+$(str4).val();
+ 		$(str2).val(value);
+		alert($(str2).val());
  	}
  }
   </script>
@@ -88,7 +92,7 @@
 						</label>
 					</td>
 					<td class="value">
-					     	 <input id="listName" name="listName" type="text" style="width: 150px" class="inputxt"  ignore="ignore" />
+					     	 <input id="listName" name="listName" type="text" style="width: 150px" class="inputxt"  datatype="*" />
 							<span class="Validform_checktip"></span>
 							<label class="Validform_label" style="display: none;">表格名称</label>
 						</td>
@@ -98,7 +102,7 @@
 						</label>
 					</td>
 					<td class="value">
-							<t:dictSelect field="listType" type="list"  typeGroupCode="list_type"  defaultVal="${baseTablePage.listType}" hasLabel="false"  title="表格类型" ></t:dictSelect>     
+							<t:dictSelect field="listType" type="list"  typeGroupCode="list_type"  defaultVal="${baseTablePage.listType}" hasLabel="false"  title="表格类型" datatype="*" ></t:dictSelect>     
 							<span class="Validform_checktip"></span>
 							<label class="Validform_label" style="display: none;">表格类型</label>
 						</td>
