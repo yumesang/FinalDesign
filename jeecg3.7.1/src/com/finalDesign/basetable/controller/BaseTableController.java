@@ -119,6 +119,133 @@ public class BaseTableController extends BaseController {
 	 * @param user
 	 */
 
+	/**
+	 * 充值卡消耗明细  打印 页面跳转
+	 * 
+	 * @return
+	 */
+	@RequestMapping(params = "jump")
+	public Object jump(HttpServletRequest req, String id ) {//keyWords 包含字段名与值	
+			req.setAttribute("url", "baseTableController.do?printView&id="+id);		
+		return "forward:/context/qtPrintSheetFrm.jsp";
+	}
+	
+	/**
+	 * 充值卡消耗明细  打印 页面
+	 * 
+	 * @return
+	 */
+	@RequestMapping(params = "printView")
+	public ModelAndView printData(HttpServletRequest request ,String id ) {
+		String sql="select list_name,list_type,name,age,sex,profession,depart_name,memo,self_string_name,self_string from base_table t where t.id = '"+ id +"'";
+		List<Map<String, Object>> resultList=systemService.findForJdbc(sql);
+		List<Map<String, Object>> smallList = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> normalList = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> bigList = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> biggestList = new ArrayList<Map<String,Object>>();
+		//表单生成逻辑
+		for(Map<String,Object> map:resultList){
+			Map<String,Object> smallMap = new HashMap<String,Object>();		
+			Map<String,Object> normalMap = new HashMap<String,Object>();	
+			Map<String,Object> bigMap = new HashMap<String,Object>();	
+			Map<String,Object> biggestMap = new HashMap<String,Object>();	
+			//基础按键判断
+			int smallNum = 0,normalNum = 0,bigNum = 0,biggestNum = 0;
+			if(!map.get("name").equals("")){smallMap.put(String.valueOf(smallNum), "姓名");smallNum++;}
+			if(!map.get("age").equals("")){smallMap.put(String.valueOf(smallNum), "年龄");smallNum++;}
+			if(!map.get("sex").equals("")){smallMap.put(String.valueOf(smallNum), "性别");smallNum++;}
+			if(!map.get("profession").equals("")){smallMap.put(String.valueOf(smallNum), "职称");smallNum++;}
+			if(!map.get("depart_name").equals("")){smallMap.put(String.valueOf(smallNum), "系别");smallNum++;}
+			if(!map.get("memo").equals("")){normalMap.put(String.valueOf(normalNum), "备注");normalNum++;}
+			//自定义字段判断
+			String[] selfStrName = String.valueOf(map.get("self_string_name")).split(",");
+			String[] selfStr = String.valueOf(map.get("self_string")).split(",");
+			for(int i=0;i<selfStr.length;i++){
+				if(selfStr[i].split(":")[0].equals("input")){
+					if(selfStr[i].split(":")[1].equals("small")){smallMap.put(String.valueOf(smallNum), selfStrName[i]);smallNum++;}
+					if(selfStr[i].split(":")[1].equals("normal")){normalMap.put(String.valueOf(normalNum), selfStrName[i]);normalNum++;}
+					if(selfStr[i].split(":")[1].equals("big")){bigMap.put(String.valueOf(bigNum), selfStrName[i]);bigNum++;}
+					if(selfStr[i].split(":")[1].equals("biggest")){biggestMap.put(String.valueOf(biggestNum), selfStrName[i]);biggestNum++;}
+				}else{
+					smallMap.put(String.valueOf(smallNum), selfStrName[i]+":"+selfStr[i]);
+					smallNum++;
+				}
+			}
+			smallList.add(smallMap);
+			normalList.add(normalMap);
+			bigList.add(bigMap);
+			biggestList.add(biggestMap);
+		}
+		String smallStr="",normalStr="",bigStr="",biggestStr="";int trNum=0;	
+		//基础20px方格搭建
+		if(smallList.get(0).size() < 0){
+			smallStr = "<tr>";
+		}
+		for(int i=0;i<smallList.get(0).size();i++){	
+			String[] str = smallList.get(0).get(String.valueOf(i)).toString().split(":");
+			if(str.length <= 1){
+				smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' style='heigth:20px'></td>";
+				trNum++;
+			}else{
+				if(str[2].split("-").length >= 5){
+					for(int colNum=0;colNum<trNum;colNum++){
+						smallStr+= "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'></td>";
+					}
+					smallStr += "</tr><tr><td class='pcd_left_td_normal' style='heigth:20px'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='heigth:20px'>";			
+					trNum = 3;
+				}else{
+					smallStr += "<td class='pcd_left_td_normal' style='heigth:20px'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' style='heigth:20px'>";			
+				}	
+				for(int selectNum=0;selectNum<str[2].split("-").length;selectNum++){
+					smallStr += "<div style='float:left;'><input name='"+ str[1]+i +"' type='"+ str[1] +"' value='"+ str[1] +"'/>"+ str[2].split("-")[selectNum] +"</div>";
+				}
+				smallStr += "</td>";
+				trNum++;
+			}
+			if(trNum >=3){
+				smallStr += "</tr><tr>";
+				trNum = 0;
+			}
+		}
+		if(trNum<3){
+			for(int colNum=0;colNum<trNum;colNum++){
+				smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'></td></td class='pcd_left_td_normal' style='heigth:20px'></td>";
+			}
+		}	
+		smallStr += "</tr>";
+		//基础50px方格搭建
+		for(int i=0;i<normalList.get(0).size();i++){
+			String[] str = normalList.get(0).get(String.valueOf(i)).toString().split(":");
+			if(str.length <= 1){
+				normalStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:50px;'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:50px'></tr>";
+			}
+		}
+		//基础200px方格搭建
+		for(int i=0;i<bigList.get(0).size();i++){
+			String[] str = bigList.get(0).get(String.valueOf(i)).toString().split(":");
+			if(str.length <= 1){
+				bigStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:200px;'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:200px'></tr>";
+			}
+		}
+		//基础500px方格搭建
+		for(int i=0;i<biggestList.get(0).size();i++){
+			String[] str = biggestList.get(0).get(String.valueOf(i)).toString().split(":");
+			if(str.length <= 1){
+				biggestStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:500px;'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:500px'></tr>";
+			}
+		}
+		//传回jsp
+		request.setAttribute("title", resultList.get(0).get("list_name"));
+		request.setAttribute("smallStr", smallStr);
+		request.setAttribute("normalStr", normalStr);
+		request.setAttribute("bigStr", bigStr);
+		request.setAttribute("biggestStr", biggestStr);
+		request.setAttribute("listType", resultList.get(0).get("list_type"));
+		request.setAttribute("createPerson", ResourceUtil.getSessionUser().getRealName());
+		request.setAttribute("createDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		return new ModelAndView("com/finalDesign/basetable/printSelfTablePreview");
+	}
+	
 	@RequestMapping(params = "datagrid")
 	public void datagrid(BaseTableEntity baseTable,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
 		CriteriaQuery cq = new CriteriaQuery(BaseTableEntity.class, dataGrid);

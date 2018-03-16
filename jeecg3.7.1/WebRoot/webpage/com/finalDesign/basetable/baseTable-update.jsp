@@ -11,7 +11,7 @@
   	if ("${baseTablePage.age}" != ""){$("#ageBox").attr("checked","checked");}
   	if ("${baseTablePage.sex}" != ""){$("#sexBox").attr("checked","checked");}
   	if ("${baseTablePage.profession}" != ""){$("#professionBox").attr("checked","checked");}
-  	if ("${baseTablePage.memo}" != ""){$("#momeBox").attr("checked","checked");}
+  	if ("${baseTablePage.memo}" != ""){$("#memoBox").attr("checked","checked");}
   	if ("${baseTablePage.departName}" != ""){$("#departNameBox").attr("checked","checked");}
   	if("${baseTablePage.enable}" == "true"){
   		$("input[value=\"enable\"]").attr("checked","checked");
@@ -22,25 +22,28 @@
   			var str2 = str[i].split(":");
   			var str3 = "${selfStringName }".split(",");
   			$("#lastRow").before("<tr name=\"selfStringList\"><td align=\"right\"><label class=\"Validform_label\">自定义字段"+ (i+1) +":</label></td><td class=\"value\"><input id=\"selfStringName"+(i+1)+"\" name=\"selfStringName\" type=\"text\" style=\"width: 150px\" value=\""+ str3[i] +"\" class=\"inputxt\"  ignore=\"ignore\" /><span class=\"Validform_checktip\"></span><label class=\"Validform_label\" style=\"display: none;\" >自定义字段名"+(i+1)+"</label></td><td align=\"center\"><input id=\"radioSelect"+(i+1)+"radio\" name=\"radioSelect"+(i+1)+"\" type=\"radio\" onclick=\"selectType(name)\"  value=\"radio\" />单选框   <input id=\"radioSelect"+(i+1)+"checkBox\" name=\"radioSelect"+(i+1)+"\" type=\"radio\" onclick=\"selectType(name)\" value=\"checkBox\" />复选框   <input id=\"radioSelect"+(i+1)+"input\" name=\"radioSelect"+(i+1)+"\" type=\"radio\" onclick=\"selectType(name)\" value=\"input\" />输入框      </td><td align=\"center\"><select id=\"sizeSelect"+ (i+1) +"\" name=\"sizeSelect"+ (i+1) +"\" hidden=\"hidden\" onchange=\"getSelfValue(name)\" ><option value=\"small\">20px</option><option value=\"normal\">50px</option><option value=\"big\">200px</option><option value=\"biggest\">500px</option></select><input id=\"addChoose"+ (i+1) +"\" name=\"addChooses"+ (i+1) +"\" type=\"text\" placeholder=\"输入选项以'-'隔开\" style=\"display:none;\" onchange=\"getSelfValue(name)\" /><input id=\"selfString"+ (i+1) +"\" name=\"selfString\" style=\"display:none\" type=\"text\" /></td></tr>");
-			if(str2[0] == "radio" || str2[0] == "checkBox"){
-				alert(str2[0]+" "+str2[1]);
+			if(str2[0].trim() == "radio" || str2[0].trim() == "checkBox" ){
 				var value = "#radioSelect"+ (i+1) +"radio";
 				if(str2[0] == "radio"){			
-					alert("in"+str2[0]);
 					$(value).attr("checked","checked");
 				}else{
-					alert("in"+str2[0]);
 					value = "#radioSelect"+ (i+1) +"checkBox";
 					$(value).attr("checked","checked");
 				}
+				var str5 = "#selfString"+ (i+1); 
 				var str4 = "#addChoose"+(i+1);
 				$(str4).attr("value",str2[1]);
+				$(str5).attr("value",str2[0].trim()+":"+str2[1]);
 				$(str4).removeAttr("style");
 			}else{
 				var value = "#radioSelect"+ (i+1) +"input";
 				$(value).attr("checked","checked");
 				var str4 = "#sizeSelect"+ (i+1);
-				$(str4).attr("value",str2[1]);
+				var str5 = "option[value="+ str2[1]+"]";
+				var str6 = "#selfString"+ (i+1); ;
+				$(str4).children(str5).attr("selected","selected");
+				$(str5).attr("value",str2[1]);
+				$(str6).attr("value",str2[0].trim()+":"+str2[1]);
 				$(str4).removeAttr("hidden");
 			}	
   		}
@@ -116,17 +119,15 @@
  	if(type == "radio" || type == "checkBox"){
 		var value = type+":"+$(str3).val();
 		$(str2).val(value);
-		alert($(str2).val());
  	}else{
  		var value = type+":"+$(str4).val();
  		$(str2).val(value);
-		alert($(str2).val());
  	}
  }
   </script>
  </head>
  <body>
-  <t:formvalid formid="formobj" dialog="true" usePlugin="password" layout="table" action="baseTableController.do?doAdd" >
+  <t:formvalid formid="formobj" dialog="true" usePlugin="password" layout="table" action="baseTableController.do?doUpdate" >
 					<input id="id" name="id" type="hidden" value="${baseTablePage.id }"/>
 		<table style="width: 700px;" cellpadding="0" cellspacing="1" class="formtable">
 				<tr>
@@ -136,7 +137,7 @@
 						</label>
 					</td>
 					<td class="value">
-					     	 <input id="listName" name="listName" type="text" style="width: 150px" class="inputxt" value="${baseTablePage.listName}" ignore="ignore" />
+					     	 <input id="listName" name="listName" type="text" style="width: 150px" class="inputxt" value="${baseTablePage.listName}" datatype="*" />
 							<span class="Validform_checktip"></span>
 							<label class="Validform_label" style="display: none;">表格名称</label>
 						</td>
@@ -146,7 +147,7 @@
 						</label>
 					</td>
 					<td class="value">
-							<t:dictSelect field="listType" type="list"  typeGroupCode="list_type"  defaultVal="${baseTablePage.listType}"  hasLabel="false"  title="表格类型" ></t:dictSelect>     
+							<t:dictSelect field="listType" type="list"  typeGroupCode="list_type"  defaultVal="${baseTablePage.listType}"  hasLabel="false" datatype="*"  title="表格类型" ></t:dictSelect>     
 							<span class="Validform_checktip"></span>
 							<label class="Validform_label" style="display: none;">表格类型</label>
 						</td>
@@ -277,7 +278,7 @@
 						</label>
 					</td>
 					<td class="value">
-					     	 <input id="enable" name="enable" type="text" style="width: 150px" class="inputxt" value="${baseTablePage.enable}"  datatype="/^(-?\d+)(\.\d+)?$/"  ignore="ignore" />
+					     	 <input id="enable" name="enable" type="text" style="width: 150px" class="inputxt" value="${baseTablePage.enable}"   ignore="ignore" />
 							<span class="Validform_checktip"></span>
 							<label class="Validform_label" style="display: none;">是否启用</label>
 						</td>

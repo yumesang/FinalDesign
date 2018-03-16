@@ -72,11 +72,9 @@
  	if(type == "radio" || type == "checkBox"){
 		var value = type+":"+$(str3).val();
 		$(str2).val(value);
-		alert($(str2).val());
  	}else{
  		var value = type+":"+$(str4).val();
  		$(str2).val(value);
-		alert($(str2).val());
  	}
  }
   </script>
