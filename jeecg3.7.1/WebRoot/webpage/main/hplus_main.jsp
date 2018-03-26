@@ -14,12 +14,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
 
-    <title><t:mutiLang langKey="jeect.platform"/></title>
+    <title><t:mutiLang langKey="带权教务系统测试版"/></title>
 
-    <meta name="keywords" content="JEECG 企业级快速开发平台">
-    <meta name="description" content="JEECG 企业级快速开发平台，她采用强大代码生成，在线开发能力">
+    <meta name="keywords" content="带权教务系统测试版">
+    <meta name="description" content="带权教务系统测试版">
 
-    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="shortcut icon" href="images/Mega.ico">
     <link href="plug-in-ui/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
     <link href="plug-in-ui/hplus/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
     <link rel="stylesheet" href="plug-in/ace/assets/css/font-awesome.min.css" />
@@ -145,7 +145,6 @@
                     <!-- update-end--Author: chenj Date:20160812 for: TASK #1269 【ace h+】风格无用的右上角功能隐藏，暂时注释掉 -->
                     
                     <!-- //update-start--Author: chenj Date:20160726 for: TASK #1207 [改造]h+风格下，去掉logo下面的内容，迁移位置到右上角，主题位置 -->
-                    
                     <li class="dropdown" onfocus="bindFrameClick()">
                     	<a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                                 <span ><strong class="font-bold">${userName }</strong></span>
@@ -161,7 +160,6 @@
                             <li><a href="javascript:openwindow('<t:mutiLang langKey="common.ssms.getSysInfos"/>','tSSmsController.do?getSysInfos')"><t:mutiLang langKey="common.ssms.getSysInfos"/></a></li>
                             <li><a href="javascript:add('<t:mutiLang langKey="common.change.style"/>','userController.do?changestyle','',550,250)"><t:mutiLang langKey="common.my.style"/></a></li>
                             <li><a href="javascript:clearLocalstorage()"><t:mutiLang langKey="common.clear.localstorage"/></a></li>
-                            <li><a href="javascript:toJeecgYun()">云应用中心</a></li>
                             <!-- update-start--Author: chenj Date:20160812 for: TASK #1269 【ace h+】风格无用的右上角功能隐藏，暂时注释掉 -->
                             <!-- <li><a href="http://yun.jeecg.org" target="_blank">云应用中心</li> -->
                            <!--  <li class="divider"></li>
@@ -227,7 +225,7 @@
         <!-- update-end--Author:zhoujf  Date:20170710 for：TASK #2003 【UI改进】列表加载慢的时候会出现白板  -->
         <!-- update-begin--Author:xuelin  Date:20170611 for：TASK #2100 【列表样式美化】【样式专题】Jeecg平台任务 --1下面这条线，变明朗点--------------------  -->
         <div class="footer" style="border-top:none;">
-            <div class="pull-right">&copy; <t:mutiLang langKey="system.version.number"/> <a href="http://www.jeecg.org/" target="_blank">jeecg</a>
+            <div class="pull-right"><span id="DateTime" style="text-align: right;font-size: 15px;">系统时间加载中...</span>
             </div>
         </div>        
 		<!-- update-end--Author:xuelin  Date:20170611 for：TASK #2100 【列表样式美化】【样式专题】Jeecg平台任务 --1下面这条线，变明朗点----------------------  -->
@@ -682,6 +680,28 @@
     function bindFrameClick(){
     	$(".J_iframe").contents().find("body").attr("onclick", "parent.frameBodyClick()"); 
     }
+    
+    	window.onload = function () {  
+       	//定时器每秒调用一次fnDate()  
+        setInterval(function () {fnDate();}, 1000);  
+	}  
+      //js 获取当前时间  
+    	function fnDate() {  
+        	var oDiv = document.getElementById("DateTime");  
+        	var date = new Date();  
+        	var year = date.getFullYear();//当前年份  
+        	var month = date.getMonth();//当前月份  
+        	var data = date.getDate();//天  
+        	var hours = date.getHours();//小时  
+        	var minute = date.getMinutes();//分  
+        	var second = date.getSeconds();//秒  
+        	var time = year + "-" + fnW((month + 1)) + "-" + fnW(data) + " " + fnW(hours) + ":" + fnW(minute) + ":" + fnW(second);  
+        	var a = new Array("日", "一", "二", "三", "四", "五", "六");  
+        	var week = new Date().getDay();   
+        	oDiv.innerHTML = time + "　";  
+    	}  
+    //补位 当某个字段不是两位数时补0  
+    	function fnW(str){return str > 9 ?  str :  "0" + str;} 
 
 </script>
 </body>

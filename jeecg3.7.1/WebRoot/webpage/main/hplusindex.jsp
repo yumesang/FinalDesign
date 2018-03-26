@@ -29,12 +29,13 @@
                         <span class="label label-primary"></span>
                     </div>
                     <div class="ibox-content">
-                        <div>                           
-                            ${printTask }
+                        <div style="height: 90px;overflow: auto;">    
+                        	<c:if test="${printTask == null }"><div style="margin-left: 380px;margin-top: 30px;font-size: 20px;color: #CDCDC1">暂无需要处理的事务</div></c:if>                       
+                            <c:if test="${printTask != null }">${printTask }</c:if>
                         </div>                                                                                                                              
                     </div>                                       
                 </div>             
-                <div class="ibox float-e-margins">
+                <div class="ibox float-e-margins" >
                     <div class="ibox-title" style="height: 60px;">
                         <h5 style="font-size: 20px;">常用表格</h5>                      
                         	<select id="selectList" class="pull-right text-right" style="width: auto;height: auto;" onchange="selecteList()">
@@ -54,21 +55,16 @@
                         		<option value="other">其他类</option>                      		                       		
                         	</select>                     
                     </div>
-                    <div class="ibox-content no-padding">
-                        <ul class="list-group">
-                         <li id="default" class="list-group-item" style="overflow: hidden; display: none;"></li>
+                    <div class="ibox-content no-padding" style="height: 300px;overflow: auto;">
+                        <ul class="list-group">                   
+                         <li id="default" class="list-group-item" ></li>
                             <li id="approval" class="list-group-item" style="overflow: hidden; display: none;">
-                            	<table>                            		
+                            	<table>                                         			            		
                             			<tr style="height: 50px;">
                             				<td><Strong style="font-size: 15px;">审批类</Strong></td>                            				
                             			</tr>
                             			<tr>
-                            				<td><p><a class="tableList" onclick="oilApply()" href="#">申请表</a></p></td>
-                            				<td><p><a class="tableList" onclick="oilType0()" href="#">申请表</a></p></td>     
-                                			<td><p><a class="tableList" onclick="oilType1()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="oilType2()" href="#">申请表</a></p></td>   
-                                			<td><p><a class="tableList" onclick="moneyInsert()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="moneyConsume()" href="#">申请表</a></p></td>       
+                            				${table.approval }
                                 		</tr>                                		
                             	</table>                                      
                             </li>
@@ -78,12 +74,7 @@
                             				<td><Strong style="font-size: 15px;">学工类</Strong></td>                            				
                             			</tr>
                             			<tr>
-                            				<td><p><a class="tableList" onclick="oilApply()" href="#">申请表</a></p></td>
-                            				<td><p><a class="tableList" onclick="oilType0()" href="#">申请表</a></p></td>     
-                                			<td><p><a class="tableList" onclick="oilType1()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="oilType2()" href="#">申请表</a></p></td>   
-                                			<td><p><a class="tableList" onclick="moneyInsert()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="moneyConsume()" href="#">申请表</a></p></td>       
+                            				${table.engineering }
                                 		</tr>                                		
                             	</table>                                      
                             </li> 
@@ -93,12 +84,7 @@
                             				<td><Strong style="font-size: 15px;">资产类</Strong></td>                            				
                             			</tr>
                             			<tr>
-                            				<td><p><a class="tableList" onclick="oilApply()" href="#">申请表</a></p></td>
-                            				<td><p><a class="tableList" onclick="oilType0()" href="#">申请表</a></p></td>     
-                                			<td><p><a class="tableList" onclick="oilType1()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="oilType2()" href="#">申请表</a></p></td>   
-                                			<td><p><a class="tableList" onclick="moneyInsert()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="moneyConsume()" href="#">申请表</a></p></td>       
+                            				${table.asset } 
                                 		</tr>                                		
                             	</table>                                      
                             </li>
@@ -108,12 +94,7 @@
                             				<td><Strong style="font-size: 15px;">人事类</Strong></td>                            				
                             			</tr>
                             			<tr>
-                            				<td><p><a class="tableList" onclick="oilApply()" href="#">申请表</a></p></td>
-                            				<td><p><a class="tableList" onclick="oilType0()" href="#">申请表</a></p></td>     
-                                			<td><p><a class="tableList" onclick="oilType1()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="oilType2()" href="#">申请表</a></p></td>   
-                                			<td><p><a class="tableList" onclick="moneyInsert()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="moneyConsume()" href="#">申请表</a></p></td>       
+                            				${table.personnel }  
                                 		</tr>                                		
                             	</table>                                      
                             </li>    
@@ -123,12 +104,7 @@
                             				<td><Strong style="font-size: 15px;">教务类</Strong></td>                            				
                             			</tr>
                             			<tr>
-                            				<td><p><a class="tableList" onclick="oilApply()" href="#">申请表</a></p></td>
-                            				<td><p><a class="tableList" onclick="oilType0()" href="#">申请表</a></p></td>     
-                                			<td><p><a class="tableList" onclick="oilType1()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="oilType2()" href="#">申请表</a></p></td>   
-                                			<td><p><a class="tableList" onclick="moneyInsert()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="moneyConsume()" href="#">申请表</a></p></td>       
+                            				${table.educational }
                                 		</tr>                                		
                             	</table>                                      
                             </li> 
@@ -138,12 +114,7 @@
                             				<td><Strong style="font-size: 15px;">行政类</Strong></td>                            				
                             			</tr>
                             			<tr>
-                            				<td><p><a class="tableList" onclick="oilApply()" href="#">申请表</a></p></td>
-                            				<td><p><a class="tableList" onclick="oilType0()" href="#">申请表</a></p></td>     
-                                			<td><p><a class="tableList" onclick="oilType1()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="oilType2()" href="#">申请表</a></p></td>   
-                                			<td><p><a class="tableList" onclick="moneyInsert()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="moneyConsume()" href="#">申请表</a></p></td>       
+                            				${table.administration }
                                 		</tr>                                		
                             	</table>                                      
                             </li> 
@@ -153,12 +124,7 @@
                             				<td><Strong style="font-size: 15px;">申请类</Strong></td>                            				
                             			</tr>
                             			<tr>
-                            				<td><p><a class="tableList" onclick="oilApply()" href="#">申请表</a></p></td>
-                            				<td><p><a class="tableList" onclick="oilType0()" href="#">申请表</a></p></td>     
-                                			<td><p><a class="tableList" onclick="oilType1()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="oilType2()" href="#">申请表</a></p></td>   
-                                			<td><p><a class="tableList" onclick="moneyInsert()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="moneyConsume()" href="#">申请表</a></p></td>       
+                            				${table.apply }   
                                 		</tr>                                		
                             	</table>                                      
                             </li> 
@@ -168,12 +134,7 @@
                             				<td><Strong style="font-size: 15px;">党务类</Strong></td>                            				
                             			</tr>
                             			<tr>
-                            				<td><p><a class="tableList" onclick="oilApply()" href="#">申请表</a></p></td>
-                            				<td><p><a class="tableList" onclick="oilType0()" href="#">申请表</a></p></td>     
-                                			<td><p><a class="tableList" onclick="oilType1()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="oilType2()" href="#">申请表</a></p></td>   
-                                			<td><p><a class="tableList" onclick="moneyInsert()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="moneyConsume()" href="#">申请表</a></p></td>       
+                            				${table.affairs }
                                 		</tr>                                		
                             	</table>                                      
                             </li> 
@@ -183,12 +144,7 @@
                             				<td><Strong style="font-size: 15px;">财务类</Strong></td>                            				
                             			</tr>
                             			<tr>
-                            				<td><p><a class="tableList" onclick="oilApply()" href="#">申请表</a></p></td>
-                            				<td><p><a class="tableList" onclick="oilType0()" href="#">申请表</a></p></td>     
-                                			<td><p><a class="tableList" onclick="oilType1()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="oilType2()" href="#">申请表</a></p></td>   
-                                			<td><p><a class="tableList" onclick="moneyInsert()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="moneyConsume()" href="#">申请表</a></p></td>       
+                            				${table.finance }
                                 		</tr>                                		
                             	</table>                                      
                             </li> 
@@ -198,12 +154,7 @@
                             				<td><Strong style="font-size: 15px;">科研类</Strong></td>                            				
                             			</tr>
                             			<tr>
-                            				<td><p><a class="tableList" onclick="oilApply()" href="#">申请表</a></p></td>
-                            				<td><p><a class="tableList" onclick="oilType0()" href="#">申请表</a></p></td>     
-                                			<td><p><a class="tableList" onclick="oilType1()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="oilType2()" href="#">申请表</a></p></td>   
-                                			<td><p><a class="tableList" onclick="moneyInsert()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="moneyConsume()" href="#">申请表</a></p></td>       
+                            				${table.scientific }
                                 		</tr>                                		
                             	</table>                                      
                             </li> 
@@ -213,12 +164,7 @@
                             				<td><Strong style="font-size: 15px;">后勤类</Strong></td>                            				
                             			</tr>
                             			<tr>
-                            				<td><p><a class="tableList" onclick="oilApply()" href="#">申请表</a></p></td>
-                            				<td><p><a class="tableList" onclick="oilType0()" href="#">申请表</a></p></td>     
-                                			<td><p><a class="tableList" onclick="oilType1()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="oilType2()" href="#">申请表</a></p></td>   
-                                			<td><p><a class="tableList" onclick="moneyInsert()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="moneyConsume()" href="#">申请表</a></p></td>       
+                            				${table.support }
                                 		</tr>                                		
                             	</table>                                      
                             </li> 
@@ -228,12 +174,7 @@
                             				<td><Strong style="font-size: 15px;">其他类</Strong></td>                            				
                             			</tr>
                             			<tr>
-                            				<td><p><a class="tableList" onclick="oilApply()" href="#">申请表</a></p></td>
-                            				<td><p><a class="tableList" onclick="oilType0()" href="#">申请表</a></p></td>     
-                                			<td><p><a class="tableList" onclick="oilType1()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="oilType2()" href="#">申请表</a></p></td>   
-                                			<td><p><a class="tableList" onclick="moneyInsert()" href="#">申请表</a></p></td>
-                                			<td><p><a class="tableList" onclick="moneyConsume()" href="#">申请表</a></p></td>       
+                            				${table.other }
                                 		</tr>                                		
                             	</table>                                      
                             </li>                                                  
@@ -248,9 +189,10 @@
                         <small class="pull-right text-right"><a onclick="baseNews()" href="#">&nbsp&nbsp&nbsp更多</a></small>
                     </div>                    
                     <div class="ibox-content timeline">                                              
-                        <div class="timeline-item">
+                        <div class="timeline-item" style="height: 145px;">
                             <div class="row">
-                            ${printWord }
+                            	<c:if test="${printWord == null }"><div style="margin-left: 110px;margin-top: 50px;font-size: 20px;color: #CDCDC1">暂无通知</div></c:if>
+                            	<c:if test="${printWord != null }">${printWord }</c:if>
                             </div>
                         </div>
                     </div>
@@ -258,6 +200,26 @@
             </div>
             <div class="col-sm-3">
                 <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                         <h5 style="font-size: 20px;">备忘录</h5>
+                         <small class="pull-right text-right"><a onclick="addNote()" href="#">&nbsp&nbsp&nbsp添加</a></small>
+                    </div>                    
+                    <div class="ibox-content timeline" style="height: 100px;">                                              
+                        <div class="timeline-item">
+                            <div class="row">
+                            	<c:if test="${notebook == null }"><div style="margin-left: 110px;margin-top: 20px;font-size: 20px;color: #CDCDC1">暂无备忘</div></c:if>
+                            	<c:if test="${notebook == null }">${notebook }</c:if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox-content timeline">  
+            		<iframe name="weather_inc" src="http://i.tianqi.com/index.php?c=code&id=7" width="300" height="97" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe></div>
+            </div>
+            <div class="col-sm-3">
+                <div class="ibox float-e-margins" hidden="hidden">
                     <div class="ibox-title">
                         <h5 style="font-size: 20px;">作品说明</h5>
                     </div>                    
@@ -270,6 +232,7 @@
                     </div>
                 </div>
             </div>
+            
                         <!-- <div class="col-sm-3">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
@@ -301,44 +264,30 @@
  			$(str).siblings().hide(500);
  			$(str).show(500);
  		}
-
- 		
-		selected = str;
+			selected = str;
  	}
  	
- 	function oilApply(){
- 		var title = "油料申请表";
- 		addOneTab(title, "");
+ 	function goAddTab(id,title){
+ 		var str = "baseTableController.do?printView&id="+id;
+  		addOneTab(title, str);
  	}
- 	 function oilType0(){
- 	  	var title = "油料入库登记";
- 		addOneTab(title, "");
- 	}
- 	 function oilType1(){
- 	 	var title = "油料出库登记";
- 		addOneTab(title, "");
- 	} 	
- 	 function oilType2(){
- 	 	var title = "油料消耗登记";
- 		addOneTab(title, "");
- 	}  
- 	function moneyInsert(){
- 	 	var title = "经费收入登记";
- 		addOneTab(title, "");
- 	} 	 
- 	function moneyConsume(){
- 	 	var title = "经费支出登记";
- 		addOneTab(title, "");
- 	}
+
  	function baseNews(){ 		
  		var title = "通知公告";
  		addOneTab(title, "baseNewsController.do?list");
  	}
  	function readMore(){
+ 		alert("开发中");
  		var title = "待办事宜";
  		addOneTab(title, "");
 /*  		var title = "待办事宜";
  		addOneTab(title, "Controller.do?list"); */
+ 	}
+ 	
+ 	function addNote(){
+ 		alert("开发中");
+ 		var title = "添加备忘";
+ 		addOneTab(title, "");
  	}
  	function jumpToHplusHome(){
  		var title = "作品说明手册";
@@ -357,6 +306,8 @@
 		openwindow(title, url,"dgList",1300,550);
 		$.ajax({success:function(data){$('#informList').datagrid('reload');}})  
 	}
+	
+
  	
  </script>
 </body>

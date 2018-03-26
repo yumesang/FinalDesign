@@ -63,6 +63,8 @@
   		}else{
   	  		$(str2).attr("value","small");
   		}
+  	}else{
+  		$(str2).removeAttr("value");	
   	}
   };
   
@@ -158,22 +160,22 @@
 					</td>
 					<td colspan="3" align="center">
 						<div style="float: left;width: 150px;height: 20px">
-							<input id="nameBox" type="checkbox" onclick="goAddString(id)" />姓名						
+							<input id="nameBox" type="checkbox" onchange="goAddString(id)" />姓名						
 						</div>
 						<div style="float: left;width: 150px;height: 20px">
-							<input id="ageBox" type="checkbox" onclick="goAddString(id)" />年龄						
+							<input id="ageBox" type="checkbox" onchange="goAddString(id)" />年龄						
 						</div>
 						<div style="float: left;width: 150px;height: 20px">
-							<input id="sexBox" type="checkbox" onclick="goAddString(id)" />性别						
+							<input id="sexBox" type="checkbox" onchange="goAddString(id)" />性别						
 						</div>
 						<div style="float: left; width: 150px;height: 20px">
-							<input id="professionBox" type="checkbox" onclick="goAddString(id)" />职称						
+							<input id="professionBox" type="checkbox" onchange="goAddString(id)" />职称						
 						</div>
 						<div style="float: left;width: 150px;height: 20px">
-							<input id="memoBox" type="checkbox" onclick="goAddString(id)" />备注						
+							<input id="memoBox" type="checkbox" onchange="goAddString(id)" />备注						
 						</div>
 						<div style="float: left;width: 150px;height: 20px">
-							<input id="departNameBox" type="checkbox" onclick="goAddString(id)" />系别																																						
+							<input id="departNameBox" type="checkbox" onchange="goAddString(id)" />系别																																						
 						</div>						
 					</td>
 				</tr>

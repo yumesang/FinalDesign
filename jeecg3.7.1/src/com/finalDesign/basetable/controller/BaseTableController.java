@@ -183,9 +183,11 @@ public class BaseTableController extends BaseController {
 		}
 		for(int i=0;i<smallList.get(0).size();i++){	
 			String[] str = smallList.get(0).get(String.valueOf(i)).toString().split(":");
-			if(str.length <= 1){
+			if(str.length < 2){
 				smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' style='heigth:20px'></td>";
 				trNum++;
+			}else if(str[0].equals("null")){
+				
 			}else{
 				if(str[2].split("-").length >= 5){
 					for(int colNum=0;colNum<trNum;colNum++){
@@ -207,9 +209,9 @@ public class BaseTableController extends BaseController {
 				trNum = 0;
 			}
 		}
-		if(trNum<3){
-			for(int colNum=0;colNum<trNum;colNum++){
-				smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'></td></td class='pcd_left_td_normal' style='heigth:20px'></td>";
+		if(trNum<3 && trNum > 0){
+			for(int colNum=trNum;colNum<3;colNum++){
+				smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'></td><td class='pcd_left_td_normal' style='heigth:20px'></td>";
 			}
 		}	
 		smallStr += "</tr>";
@@ -397,6 +399,8 @@ public class BaseTableController extends BaseController {
 	public ModelAndView goUpdate(BaseTableEntity baseTable, HttpServletRequest req) {
 		if (StringUtil.isNotEmpty(baseTable.getId())) {
 			baseTable = baseTableService.getEntity(BaseTableEntity.class, baseTable.getId());
+			if(baseTable.getSelfString()!=null){				
+			
 			String[] selfStringNum = baseTable.getSelfString().split(",");	
 			String selfStringName = baseTable.getSelfStringName();
 			List<String> selfStringList = new ArrayList<String>();
@@ -404,11 +408,11 @@ public class BaseTableController extends BaseController {
 				selfStringList.add(str);
 			}
 			String myselfStringList = String.valueOf(selfStringList).replace("[", "");
-			myselfStringList = String.valueOf(myselfStringList).replace("]", "");
-			
+			myselfStringList = String.valueOf(myselfStringList).replace("]", "");			
 			req.setAttribute("selfStringNum", selfStringNum.length);
 			req.setAttribute("selfStringList", myselfStringList);
 			req.setAttribute("selfStringName", selfStringName);
+			}
 			req.setAttribute("baseTablePage", baseTable);
 		}
 		return new ModelAndView("com/finalDesign/basetable/baseTable-update");

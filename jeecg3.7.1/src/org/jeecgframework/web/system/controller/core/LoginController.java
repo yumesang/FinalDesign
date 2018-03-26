@@ -538,15 +538,62 @@ public class LoginController extends BaseController{
 					Object[] ob = list.get(i);
 					String id = ob[3].toString();
 					if(i == list.size()-1){
-						printWord = printWord + "<a onclick=\"showDetail( '"+ id +"', '"+ ob[0].toString() +"')\" href=\"#\">" + ob[0] + " " + ob[1] + " ("  + ob[2].toString().substring(0,10) + ")</a></li></ol>";
+						printWord = printWord + "<a onclick=\"showDetail( '"+ id +"', '"+ ob[0].toString() +"')\" href=\"#\">" + ob[0] + " ("  + ob[2].toString().substring(0,10) + ")</a></li></ol>";
 					}else{
-						printWord = printWord + "<a onclick=\"showDetail( '"+ id +"', '"+ ob[0].toString() +"')\" href=\"#\">" + ob[0] + " " + ob[1] + " (" +  ob[2].toString().substring(0,10) + ")</a></li><li><a>";
+						printWord = printWord + "<a onclick=\"showDetail( '"+ id +"', '"+ ob[0].toString() +"')\" href=\"#\">" + ob[0] + " (" +  ob[2].toString().substring(0,10) + ")</a></li><li><a>";
 					}	
 				}
 				if(printWord.equals("<ol><li>")){
-					printWord = "暂无通知";
+					printWord = null;
 				}
+		//表格类别界面
+				String approval="",engineering = "",asset = "",personnel = "",educational = "",administration = "",apply = "",
+						affairs = "",finance = "",scientific = "",support = "",other = "";
+				String listSql = "select t.list_type as listType, t.list_name, t.id as listName from base_table t where 1=1";
+				List<Object[]> baseTableList = systemService.findListbySql(listSql);
+				for(Object[] obj:baseTableList){
+					if(obj[0].toString().equals("approval")){
+						approval += "<td><p><a class=\"tableList\" onclick=\"goAddTab('"+ obj[2] +"','"+ obj[1] +"')\" href=\"#\">"+ obj[1] +"</a></p></td>";
+					}else if(obj[0].toString().equals("engineering")){
+						engineering += "<td><p><a class=\"tableList\" onclick=\"goAddTab('"+ obj[2] +"','"+ obj[1] +"')\" href=\"#\">"+ obj[1] +"</a></p></td>";
+					}else if(obj[0].toString().equals("asset")){
+						asset += "<td><p><a class=\"tableList\" onclick=\"goAddTab('"+ obj[2] +"','"+ obj[1] +"')\" href=\"#\">"+ obj[1] +"</a></p></td>";
+					}else if(obj[0].toString().equals("personnel")){
+						personnel += "<td><p><a class=\"tableList\" onclick=\"goAddTab('"+ obj[2] +"','"+ obj[1] +"')\" href=\"#\">"+ obj[1] +"</a></p></td>";
+					}else if(obj[0].toString().equals("educational")){
+						educational += "<td><p><a class=\"tableList\" onclick=\"goAddTab('"+ obj[2] +"','"+ obj[1] +"')\" href=\"#\">"+ obj[1] +"</a></p></td>";
+					}else if(obj[0].toString().equals("administration")){
+						administration += "<td><p><a class=\"tableList\" onclick=\"goAddTab('"+ obj[2] +"','"+ obj[1] +"')\" href=\"#\">"+ obj[1] +"</a></p></td>";
+					}else if(obj[0].toString().equals("apply")){
+						apply += "<td><p><a class=\"tableList\" onclick=\"goAddTab('"+ obj[2] +"','"+ obj[1] +"')\" href=\"#\">"+ obj[1] +"</a></p></td>";
+					}else if(obj[0].toString().equals("affairs")){
+						affairs += "<td><p><a class=\"tableList\" onclick=\"goAddTab('"+ obj[2] +"','"+ obj[1] +"')\" href=\"#\">"+ obj[1] +"</a></p></td>";
+					}else if(obj[0].toString().equals("finance")){
+						finance += "<td><p><a class=\"tableList\" onclick=\"goAddTab('"+ obj[2] +"','"+ obj[1] +"')\" href=\"#\">"+ obj[1] +"</a></p></td>";
+					}else if(obj[0].toString().equals("scientific")){
+						scientific += "<td><p><a class=\"tableList\" onclick=\"goAddTab('"+ obj[2] +"','"+ obj[1] +"')\" href=\"#\">"+ obj[1] +"</a></p></td>";
+					}else if(obj[0].toString().equals("support")){
+						support  += "<td><p><a class=\"tableList\" onclick=\"goAddTab('"+ obj[2] +"','"+ obj[1] +"')\" href=\"#\">"+ obj[1] +"</a></p></td>";
+					}else if(obj[0].toString().equals("other")){
+						other += "<td><p><a class=\"tableList\" onclick=\"goAddTab('"+ obj[2] +"','"+ obj[1] +"')\" href=\"#\">"+ obj[1] +"</a></p></td>";
+					}
+				}
+		Map<String,String> table = new HashMap<String,String>();
+		table.put("approval", approval);
+		table.put("engineering", engineering);
+		table.put("asset", asset);
+		table.put("personnel", personnel);
+		table.put("educational", educational);
+		table.put("administration", administration);
+		table.put("apply", apply);
+		table.put("affairs", affairs);
+		table.put("finance", finance);
+		table.put("scientific", scientific);
+		table.put("support", support);
+		table.put("other", other);
 		request.setAttribute("printWord", printWord);
+		request.setAttribute("table", table);
+		
 		return new ModelAndView("main/hplusindex");
 	}
 	
