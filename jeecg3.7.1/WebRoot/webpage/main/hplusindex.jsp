@@ -56,8 +56,15 @@
                         	</select>                     
                     </div>
                     <div class="ibox-content no-padding" style="height: 300px;overflow: auto;">
-                        <ul class="list-group">                   
-                         <li id="default" class="list-group-item" ></li>
+                        <ul class="list-group">     
+                         <li id="default" class="list-group-item" style="display: none;" ></li>              
+                         <li id="null" class="list-group-item" >
+                         	<table>                                         			            		
+                            	<tr style="height: 50px;">
+                            		<td><div style="margin-left: 380px;margin-top: 80px;font-size: 20px;color: #CDCDC1">右上角选择表格类型</div></td>                            				
+                            	</tr>                               		
+                            </table>  
+                         </li>
                             <li id="approval" class="list-group-item" style="overflow: hidden; display: none;">
                             	<table>                                         			            		
                             			<tr style="height: 50px;">
@@ -258,9 +265,10 @@
  				$(str).show(500);
  			});
  		} */
+ 		$("#null").remove();
  		if(str == "#default"){
  			$(str).siblings().show(500);
- 		}else{
+ 		}else{ 			
  			$(str).siblings().hide(500);
  			$(str).show(500);
  		}
@@ -285,9 +293,8 @@
  	}
  	
  	function addNote(){
- 		alert("开发中");
  		var title = "添加备忘";
- 		addOneTab(title, "");
+ 		openwindow(title, "notebookController.do?list","dgList",1000,600);
  	}
  	function jumpToHplusHome(){
  		var title = "作品说明手册";

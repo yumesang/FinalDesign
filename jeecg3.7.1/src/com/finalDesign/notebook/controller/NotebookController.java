@@ -1,9 +1,12 @@
 package com.finalDesign.notebook.controller;
 import com.finalDesign.notebook.entity.NotebookEntity;
 import com.finalDesign.notebook.service.NotebookServiceI;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.text.SimpleDateFormat;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,7 +17,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import org.jeecgframework.core.common.controller.BaseController;
 import org.jeecgframework.core.common.exception.BusinessException;
 import org.jeecgframework.core.common.hibernate.qbc.CriteriaQuery;
@@ -29,6 +31,7 @@ import org.jeecgframework.web.system.service.SystemService;
 import org.jeecgframework.core.util.MyBeanUtils;
 
 import java.io.OutputStream;
+
 import org.jeecgframework.core.util.BrowserUtils;
 import org.jeecgframework.poi.excel.ExcelExportUtil;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
@@ -38,15 +41,19 @@ import org.jeecgframework.poi.excel.entity.TemplateExportParams;
 import org.jeecgframework.poi.excel.entity.vo.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.vo.TemplateExcelConstants;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.tools.ant.taskdefs.Parallel.TaskList;
 import org.jeecgframework.core.util.ResourceUtil;
+
 import java.io.IOException;
+
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import java.util.Map;
 import java.util.HashMap;
-import org.jeecgframework.core.util.ExceptionUtil;
 
+import org.jeecgframework.core.util.ExceptionUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,10 +65,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.jeecgframework.core.beanvalidator.BeanValidators;
+
 import java.util.Set;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+
 import java.net.URI;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -98,6 +109,34 @@ public class NotebookController extends BaseController {
 	@RequestMapping(params = "list")
 	public ModelAndView list(HttpServletRequest request) {
 		return new ModelAndView("com/finalDesign/notebook/notebookList");
+	}
+	
+	/**
+	 * notebook列表 页面跳转
+	 * 
+	 * @return
+	 */
+	@RequestMapping(params = "finishList")
+	public ModelAndView finishList(HttpServletRequest request) {
+		return new ModelAndView("com/finalDesign/notebook/notebookList-finish");
+	}
+	
+	/**
+	 * notebook列表 页面跳转
+	 * 
+	 * @return
+	 */
+	@RequestMapping(params = "isPassList")
+	public ModelAndView isPassList(HttpServletRequest request) {
+		return new ModelAndView("com/finalDesign/notebook/notebookList-isPass");
+	}
+	
+	@RequestMapping(params = "previewList")
+	public ModelAndView previewList(HttpServletRequest request,String id) {
+		List<Object[]> taskList = systemService.findListbySql("select t.task_name, t.task_detail from notebook t where id = '"+ id +"'");
+		request.setAttribute("taskName", taskList.get(0)[0].toString());
+		request.setAttribute("taskDetail",taskList.get(0)[1].toString());
+		return new ModelAndView("com/finalDesign/notebook/previewList");
 	}
 
 	/**
@@ -190,6 +229,12 @@ public class NotebookController extends BaseController {
 		AjaxJson j = new AjaxJson();
 		message = "notebook添加成功";
 		try{
+			Date date = new Date();
+			notebook.setCreateDate(date);
+			notebook.setEnable(0.0);
+			notebook.setCreateUserId(ResourceUtil.getSessionUser().getId());
+			notebook.setCreateUserName(ResourceUtil.getSessionUser().getRealName());
+			notebook.setIsPass(0.0);
 			notebookService.save(notebook);
 			systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}catch(Exception e){
@@ -215,6 +260,15 @@ public class NotebookController extends BaseController {
 		message = "notebook更新成功";
 		NotebookEntity t = notebookService.get(NotebookEntity.class, notebook.getId());
 		try {
+			//判断修改后的日期饰扣超过达成时间
+			Date date  = new Date();
+			notebook.setModifyDate(date);
+			SimpleDateFormat format =   new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );  
+			if(format.parse(notebook.getTargetDate().toString()).getTime() <= format.parse(date.toString()).getTime()){
+				notebook.setIsPass(0.0);
+			}else{
+				notebook.setIsPass(1.0);
+			}
 			MyBeanUtils.copyBeanNotNull2Bean(notebook, t);
 			notebookService.saveOrUpdate(t);
 			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
@@ -228,6 +282,34 @@ public class NotebookController extends BaseController {
 	}
 	
 
+	/**
+	 * 更新notebook
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(params = "docheck")
+	@ResponseBody
+	public AjaxJson docheck(NotebookEntity notebook, HttpServletRequest request,String id) {
+		String message = null;
+		AjaxJson j = new AjaxJson();
+		message = "notebook更新成功";
+		NotebookEntity t = notebookService.get(NotebookEntity.class, id);
+		try {
+			//判断修改后的日期饰扣超过达成时间
+			notebook.setEnable(1.0);
+			MyBeanUtils.copyBeanNotNull2Bean(notebook, t);
+			notebookService.saveOrUpdate(t);
+			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "notebook更新失败";
+			throw new BusinessException(e.getMessage());
+		}
+		j.setMsg(message);
+		return j;
+	}
+	
 	/**
 	 * notebook新增页面跳转
 	 * 
