@@ -136,7 +136,7 @@ public class BaseTableController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(params = "printView")
-	public ModelAndView printData(HttpServletRequest request ,String id ) {
+	public ModelAndView printData(HttpServletRequest request ,String id ,String useToken) {
 		String sql="select list_name,list_type,name,age,sex,profession,depart_name,memo,self_string_name,self_string from base_table t where t.id = '"+ id +"'";
 		List<Map<String, Object>> resultList=systemService.findForJdbc(sql);
 		List<Map<String, Object>> smallList = new ArrayList<Map<String,Object>>();
@@ -182,16 +182,16 @@ public class BaseTableController extends BaseController {
 			smallStr = "<tr>";
 		}
 		for(int i=0;i<smallList.get(0).size();i++){	
-			String[] str = smallList.get(0).get(String.valueOf(i)).toString().split(":");
-			if(str.length < 2){
-				smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' style='heigth:20px'></td>";
-				trNum++;
-			}else if(str[0].equals("null")){
-				
+			String[] str = smallList.get(0).get(String.valueOf(i)).toString().split(":");				
+			if(str.length < 2 && str.length!=0){
+					smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' style='heigth:20px'>";								
+			}else if(str[0].equals("") && trNum != 0 && str.length!=0){
+				smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'></td><td>";
 			}else{
 				if(str[2].split("-").length >= 5){
-					for(int colNum=0;colNum<trNum;colNum++){
-						smallStr+= "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'></td>";
+					for(int colNum=0;colNum<3-trNum;colNum++){
+						if(trNum != 0)
+						smallStr+= "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'></td><td class='pcd_left_td_normal' style='heigth:20px'>";
 					}
 					smallStr += "</tr><tr><td class='pcd_left_td_normal' style='heigth:20px'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='heigth:20px'>";			
 					trNum = 3;
@@ -201,39 +201,39 @@ public class BaseTableController extends BaseController {
 				for(int selectNum=0;selectNum<str[2].split("-").length;selectNum++){
 					smallStr += "<div style='float:left;'><input name='"+ str[1]+i +"' type='"+ str[1] +"' value='"+ str[1] +"'/>"+ str[2].split("-")[selectNum] +"</div>";
 				}
-				smallStr += "</td>";
-				trNum++;
 			}
+			smallStr += "</td>";
+			trNum++;
 			if(trNum >=3){
 				smallStr += "</tr><tr>";
 				trNum = 0;
 			}
 		}
 		if(trNum<3 && trNum > 0){
-			for(int colNum=trNum;colNum<3;colNum++){
+			for(int colNum=0;colNum<3-trNum;colNum++){
 				smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'></td><td class='pcd_left_td_normal' style='heigth:20px'></td>";
-			}
+			}		
 		}	
 		smallStr += "</tr>";
 		//基础50px方格搭建
 		for(int i=0;i<normalList.get(0).size();i++){
 			String[] str = normalList.get(0).get(String.valueOf(i)).toString().split(":");
 			if(str.length <= 1){
-				normalStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:50px;'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:50px'></tr>";
+				normalStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:50px;'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:50px'></td></tr>";
 			}
 		}
 		//基础200px方格搭建
 		for(int i=0;i<bigList.get(0).size();i++){
 			String[] str = bigList.get(0).get(String.valueOf(i)).toString().split(":");
 			if(str.length <= 1){
-				bigStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:200px;'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:200px'></tr>";
+				bigStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:200px;'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:200px'></td></tr>";
 			}
 		}
 		//基础500px方格搭建
 		for(int i=0;i<biggestList.get(0).size();i++){
 			String[] str = biggestList.get(0).get(String.valueOf(i)).toString().split(":");
 			if(str.length <= 1){
-				biggestStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:500px;'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:500px'></tr>";
+				biggestStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:500px;'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:500px'></td></tr>";
 			}
 		}
 		//传回jsp
@@ -245,7 +245,7 @@ public class BaseTableController extends BaseController {
 		request.setAttribute("listType", resultList.get(0).get("list_type"));
 		request.setAttribute("createPerson", ResourceUtil.getSessionUser().getRealName());
 		request.setAttribute("createDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-		return new ModelAndView("com/finalDesign/basetable/printSelfTablePreview");
+			return new ModelAndView("com/finalDesign/basetable/printSelfTablePreview");		
 	}
 	
 	@RequestMapping(params = "datagrid")

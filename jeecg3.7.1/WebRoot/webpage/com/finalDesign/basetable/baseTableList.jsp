@@ -19,6 +19,7 @@
    <t:dgToolBar title="编辑" icon="icon-edit" url="baseTableController.do?goUpdate" funname="update"></t:dgToolBar>
    <t:dgToolBar title="批量删除"  icon="icon-remove" url="baseTableController.do?doBatchDel" funname="deleteALLSelect"></t:dgToolBar>
 <%--    <t:dgToolBar title="查看" icon="icon-search" url="baseTableController.do?jump" funname="detail"></t:dgToolBar> --%>
+	<t:dgToolBar title="导入" icon="icon-put" funname="ImportXls"></t:dgToolBar>
    <t:dgToolBar title="导出" icon="icon-putout" funname="ExportXls"></t:dgToolBar>
   </t:datagrid>
   </div>
