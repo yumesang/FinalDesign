@@ -7,7 +7,7 @@
    <t:dgCol title="id"  field="id"  hidden="true"  queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="操作" field="opt" align="center" width="100"></t:dgCol>
    <t:dgFunOpt title="查看" funname="showDetail(id)" urlclass="ace_button"  urlfont="fa-search" />
-   <t:dgFunOpt title="完成" funname="doCheck(id)" urlclass="ace_button"  urlfont="fa-check" />
+   <t:dgFunOpt title="驳回" funname="docheck(id)" urlclass="ace_button"  urlfont="fa-check" />
    <t:dgCol title="任务名称"  field="taskName" queryMode="group" align="center" width="120"></t:dgCol>
    <t:dgCol title="任务内容"  field="taskDetail"  queryMode="group" align="center"  width="120"></t:dgCol>
    <t:dgCol title="任务链接"  field="taskUrl" hidden="true" queryMode="group"  width="120"></t:dgCol>
@@ -18,8 +18,6 @@
    <t:dgCol title="修改日期"  field="modifyDate" hidden="true" formatter="yyyy-MM-dd"  queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="是否完成"  field="enable"  hidden="true"  queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="是否过期"  field="isPass"  hidden="true"  queryMode="group"  width="120"></t:dgCol>
-   <t:dgToolBar title="添加备忘" icon="icon-add" url="notebookController.do?goAdd" funname="add"></t:dgToolBar>
-   <t:dgToolBar title="编辑备忘" icon="icon-edit" url="notebookController.do?goUpdate" funname="update"></t:dgToolBar>
    <t:dgToolBar title="批量删除"  icon="icon-remove" url="notebookController.do?doBatchDel" funname="deleteALLSelect"></t:dgToolBar>
 <%--    <t:dgToolBar title="查看" icon="icon-search" url="notebookController.do?goUpdate" funname="detail"></t:dgToolBar> --%>
    <t:dgToolBar title="导入" icon="icon-put" funname="ImportXls"></t:dgToolBar>
@@ -40,11 +38,11 @@
 	$.ajax({success:function(data){$("#notebookList").datagrid('reload');}})
 }   
 
- function doCheck(id){
+ function docheck(id){
 	$.ajax({
 		acync:false,
 		contentType:'application/json',
-		url:"notebookController.do?docheck&id="+id,
+		url:"notebookController.do?docheck&reduce='reduce'&id="+id,
 		success:function(data){
 				$("#notebookList").datagrid('reload');
 			}

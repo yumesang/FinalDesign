@@ -1,6 +1,6 @@
-package com.finalDesign.notebook.controller;
-import com.finalDesign.notebook.entity.NotebookEntity;
-import com.finalDesign.notebook.service.NotebookServiceI;
+package com.finalDesign.selfoaservice.controller;
+import com.finalDesign.selfoaservice.entity.SelfOaServiceEntity;
+import com.finalDesign.selfoaservice.service.SelfOaServiceServiceI;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,7 +41,6 @@ import org.jeecgframework.poi.excel.entity.TemplateExportParams;
 import org.jeecgframework.poi.excel.entity.vo.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.vo.TemplateExcelConstants;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.tools.ant.taskdefs.Parallel.TaskList;
 import org.jeecgframework.core.util.ResourceUtil;
 
 import java.io.IOException;
@@ -78,22 +77,22 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 /**   
  * @Title: Controller  
- * @Description: notebook
+ * @Description: self_oa_service
  * @author onlineGenerator
- * @date 2018-03-26 16:14:36
+ * @date 2018-03-29 09:36:44
  * @version V1.0   
  *
  */
 @Controller
-@RequestMapping("/notebookController")
-public class NotebookController extends BaseController {
+@RequestMapping("/selfOaServiceController")
+public class SelfOaServiceController extends BaseController {
 	/**
 	 * Logger for this class
 	 */
-	private static final Logger logger = Logger.getLogger(NotebookController.class);
+	private static final Logger logger = Logger.getLogger(SelfOaServiceController.class);
 
 	@Autowired
-	private NotebookServiceI notebookService;
+	private SelfOaServiceServiceI selfOaServiceService;
 	@Autowired
 	private SystemService systemService;
 	@Autowired
@@ -102,41 +101,13 @@ public class NotebookController extends BaseController {
 
 
 	/**
-	 * notebook列表 页面跳转
+	 * self_oa_service列表 页面跳转
 	 * 
 	 * @return
 	 */
 	@RequestMapping(params = "list")
 	public ModelAndView list(HttpServletRequest request) {
-		return new ModelAndView("com/finalDesign/notebook/notebookList");
-	}
-	
-	/**
-	 * notebook列表 页面跳转
-	 * 
-	 * @return
-	 */
-	@RequestMapping(params = "finishList")
-	public ModelAndView finishList(HttpServletRequest request) {
-		return new ModelAndView("com/finalDesign/notebook/notebookList-finish");
-	}
-	
-	/**
-	 * notebook列表 页面跳转
-	 * 
-	 * @return
-	 */
-	@RequestMapping(params = "isPassList")
-	public ModelAndView isPassList(HttpServletRequest request) {
-		return new ModelAndView("com/finalDesign/notebook/notebookList-isPass");
-	}
-	
-	@RequestMapping(params = "previewList")
-	public ModelAndView previewList(HttpServletRequest request,String id) {
-		List<Object[]> taskList = systemService.findListbySql("select t.task_name, t.task_detail from notebook t where id = '"+ id +"'");
-		request.setAttribute("taskName", taskList.get(0)[0].toString());
-		request.setAttribute("taskDetail",taskList.get(0)[1].toString());
-		return new ModelAndView("com/finalDesign/notebook/previewList");
+		return new ModelAndView("com/finalDesign/selfoaservice/selfOaServiceList");
 	}
 
 	/**
@@ -149,38 +120,38 @@ public class NotebookController extends BaseController {
 	 */
 
 	@RequestMapping(params = "datagrid")
-	public void datagrid(NotebookEntity notebook,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
-		CriteriaQuery cq = new CriteriaQuery(NotebookEntity.class, dataGrid);
+	public void datagrid(SelfOaServiceEntity selfOaService,HttpServletRequest request, HttpServletResponse response, DataGrid dataGrid) {
+		CriteriaQuery cq = new CriteriaQuery(SelfOaServiceEntity.class, dataGrid);
 		//查询条件组装器
-		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, notebook, request.getParameterMap());
+		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, selfOaService, request.getParameterMap());
 		try{
 		//自定义追加查询条件
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
 		cq.add();
-		this.notebookService.getDataGridReturn(cq, true);
+		this.selfOaServiceService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
 	}
 	
 	/**
-	 * 删除notebook
+	 * 删除self_oa_service
 	 * 
 	 * @return
 	 */
 	@RequestMapping(params = "doDel")
 	@ResponseBody
-	public AjaxJson doDel(NotebookEntity notebook, HttpServletRequest request) {
+	public AjaxJson doDel(SelfOaServiceEntity selfOaService, HttpServletRequest request) {
 		String message = null;
 		AjaxJson j = new AjaxJson();
-		notebook = systemService.getEntity(NotebookEntity.class, notebook.getId());
-		message = "notebook删除成功";
+		selfOaService = systemService.getEntity(SelfOaServiceEntity.class, selfOaService.getId());
+		message = "self_oa_service删除成功";
 		try{
-			notebookService.delete(notebook);
+			selfOaServiceService.delete(selfOaService);
 			systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
 		}catch(Exception e){
 			e.printStackTrace();
-			message = "notebook删除失败";
+			message = "self_oa_service删除失败";
 			throw new BusinessException(e.getMessage());
 		}
 		j.setMsg(message);
@@ -188,7 +159,7 @@ public class NotebookController extends BaseController {
 	}
 	
 	/**
-	 * 批量删除notebook
+	 * 批量删除self_oa_service
 	 * 
 	 * @return
 	 */
@@ -197,18 +168,18 @@ public class NotebookController extends BaseController {
 	public AjaxJson doBatchDel(String ids,HttpServletRequest request){
 		String message = null;
 		AjaxJson j = new AjaxJson();
-		message = "notebook删除成功";
+		message = "self_oa_service删除成功";
 		try{
 			for(String id:ids.split(",")){
-				NotebookEntity notebook = systemService.getEntity(NotebookEntity.class, 
+				SelfOaServiceEntity selfOaService = systemService.getEntity(SelfOaServiceEntity.class, 
 				id
 				);
-				notebookService.delete(notebook);
+				selfOaServiceService.delete(selfOaService);
 				systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-			message = "notebook删除失败";
+			message = "self_oa_service删除失败";
 			throw new BusinessException(e.getMessage());
 		}
 		j.setMsg(message);
@@ -217,29 +188,28 @@ public class NotebookController extends BaseController {
 
 
 	/**
-	 * 添加notebook
+	 * 添加self_oa_service
 	 * 
 	 * @param ids
 	 * @return
 	 */
 	@RequestMapping(params = "doAdd")
 	@ResponseBody
-	public AjaxJson doAdd(NotebookEntity notebook, HttpServletRequest request) {
+	public AjaxJson doAdd(SelfOaServiceEntity selfOaService, HttpServletRequest request) {
 		String message = null;
 		AjaxJson j = new AjaxJson();
-		message = "notebook添加成功";
+		message = "self_oa_service添加成功";
 		try{
 			Date date = new Date();
-			notebook.setCreateDate(date);
-			notebook.setEnable(0.0);
-			notebook.setCreateUserId(ResourceUtil.getSessionUser().getId());
-			notebook.setCreateUserName(ResourceUtil.getSessionUser().getRealName());
-			notebook.setIsPass(0.0);
-			notebookService.save(notebook);
+			selfOaService.setCreateDate(date);
+			selfOaService.setCreateUserId(ResourceUtil.getSessionUser().getId());
+			selfOaService.setCreateUserName(ResourceUtil.getSessionUser().getRealName());
+			selfOaService.setEnable(1.0);
+			selfOaServiceService.save(selfOaService);
 			systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}catch(Exception e){
 			e.printStackTrace();
-			message = "notebook添加失败";
+			message = "self_oa_service添加失败";
 			throw new BusinessException(e.getMessage());
 		}
 		j.setMsg(message);
@@ -247,34 +217,29 @@ public class NotebookController extends BaseController {
 	}
 	
 	/**
-	 * 更新notebook
+	 * 更新self_oa_service
 	 * 
 	 * @param ids
 	 * @return
 	 */
 	@RequestMapping(params = "doUpdate")
 	@ResponseBody
-	public AjaxJson doUpdate(NotebookEntity notebook, HttpServletRequest request) {
+	public AjaxJson doUpdate(SelfOaServiceEntity selfOaService, HttpServletRequest request) {
 		String message = null;
 		AjaxJson j = new AjaxJson();
-		message = "notebook更新成功";
-		NotebookEntity t = notebookService.get(NotebookEntity.class, notebook.getId());
+		message = "self_oa_service更新成功";
+		SelfOaServiceEntity t = selfOaServiceService.get(SelfOaServiceEntity.class, selfOaService.getId());
 		try {
-			//判断修改后的日期饰扣超过达成时间
-			Date date  = new Date();
-			notebook.setModifyDate(date);
-			SimpleDateFormat format =   new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );  
-			if(format.parse(notebook.getTargetDate().toString()).getTime() <= format.parse(date.toString()).getTime()){
-				notebook.setIsPass(0.0);
-			}else{
-				notebook.setIsPass(1.0);
-			}
-			MyBeanUtils.copyBeanNotNull2Bean(notebook, t);
-			notebookService.saveOrUpdate(t);
+			Date date = new Date();
+			selfOaService.setModifyDate(date);
+			selfOaService.setModifyUserId(ResourceUtil.getSessionUser().getId());
+			selfOaService.setModifyUserName(ResourceUtil.getSessionUser().getRealName());
+			MyBeanUtils.copyBeanNotNull2Bean(selfOaService, t);
+			selfOaServiceService.saveOrUpdate(t);
 			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 		} catch (Exception e) {
 			e.printStackTrace();
-			message = "notebook更新失败";
+			message = "self_oa_service更新失败";
 			throw new BusinessException(e.getMessage());
 		}
 		j.setMsg(message);
@@ -283,65 +248,38 @@ public class NotebookController extends BaseController {
 	
 
 	/**
-	 * 更新notebook
-	 * 
-	 * @param ids
-	 * @return
-	 */
-	@RequestMapping(params = "docheck")
-	@ResponseBody
-	public AjaxJson docheck(NotebookEntity notebook, HttpServletRequest request,String id, String reduce) {
-		String message = null;
-		AjaxJson j = new AjaxJson();
-		message = "notebook更新成功";
-		NotebookEntity t = notebookService.get(NotebookEntity.class, id);
-		try {
-			//判断修改后的日期饰扣超过达成时间
-			if(reduce == null){
-				notebook.setEnable(1.0);
-			}else{
-				notebook.setEnable(0.0);
-			}
-			
-			MyBeanUtils.copyBeanNotNull2Bean(notebook, t);
-			notebookService.saveOrUpdate(t);
-			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
-		} catch (Exception e) {
-			e.printStackTrace();
-			message = "notebook更新失败";
-			throw new BusinessException(e.getMessage());
-		}
-		j.setMsg(message);
-		return j;
-	}
-	
-		
-	
-	/**
-	 * notebook新增页面跳转
+	 * self_oa_service新增页面跳转
 	 * 
 	 * @return
 	 */
 	@RequestMapping(params = "goAdd")
-	public ModelAndView goAdd(NotebookEntity notebook, HttpServletRequest req) {
-		if (StringUtil.isNotEmpty(notebook.getId())) {
-			notebook = notebookService.getEntity(NotebookEntity.class, notebook.getId());
-			req.setAttribute("notebookPage", notebook);
+	public ModelAndView goAdd(SelfOaServiceEntity selfOaService, HttpServletRequest req) {
+		if (StringUtil.isNotEmpty(selfOaService.getId())) {
+			selfOaService = selfOaServiceService.getEntity(SelfOaServiceEntity.class, selfOaService.getId());
+			req.setAttribute("selfOaServicePage", selfOaService);
 		}
-		return new ModelAndView("com/finalDesign/notebook/notebook-add");
+		return new ModelAndView("com/finalDesign/selfoaservice/selfOaService-add");
 	}
 	/**
-	 * notebook编辑页面跳转
+	 * self_oa_service编辑页面跳转
 	 * 
 	 * @return
 	 */
 	@RequestMapping(params = "goUpdate")
-	public ModelAndView goUpdate(NotebookEntity notebook, HttpServletRequest req) {
-		if (StringUtil.isNotEmpty(notebook.getId())) {
-			notebook = notebookService.getEntity(NotebookEntity.class, notebook.getId());
-			req.setAttribute("notebookPage", notebook);
+	public ModelAndView goUpdate(SelfOaServiceEntity selfOaService, HttpServletRequest req) {
+		if (StringUtil.isNotEmpty(selfOaService.getId())) {
+			selfOaService = selfOaServiceService.getEntity(SelfOaServiceEntity.class, selfOaService.getId());
+			String roleId = selfOaService.getOaDetailId().toString();
+			String roleName = selfOaService.getOaDetailName().toString();
+			for(int i=0;i<(5-selfOaService.getNodeNum());i++){
+				roleId += "-";
+				roleName += "-";
+			}
+			req.setAttribute("roleIdList", roleId.split("-"));
+			req.setAttribute("roleNameList", roleName.split("-"));
+			req.setAttribute("selfOaServicePage", selfOaService);
 		}
-		return new ModelAndView("com/finalDesign/notebook/notebook-update");
+		return new ModelAndView("com/finalDesign/selfoaservice/selfOaService-update");
 	}
 	
 	/**
@@ -351,7 +289,7 @@ public class NotebookController extends BaseController {
 	 */
 	@RequestMapping(params = "upload")
 	public ModelAndView upload(HttpServletRequest req) {
-		req.setAttribute("controller_name","notebookController");
+		req.setAttribute("controller_name","selfOaServiceController");
 		return new ModelAndView("common/upload/pub_excel_upload");
 	}
 	
@@ -362,16 +300,16 @@ public class NotebookController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(params = "exportXls")
-	public String exportXls(NotebookEntity notebook,HttpServletRequest request,HttpServletResponse response
+	public String exportXls(SelfOaServiceEntity selfOaService,HttpServletRequest request,HttpServletResponse response
 			, DataGrid dataGrid,ModelMap modelMap) {
-		CriteriaQuery cq = new CriteriaQuery(NotebookEntity.class, dataGrid);
-		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, notebook, request.getParameterMap());
-		List<NotebookEntity> notebooks = this.notebookService.getListByCriteriaQuery(cq,false);
-		modelMap.put(NormalExcelConstants.FILE_NAME,"notebook");
-		modelMap.put(NormalExcelConstants.CLASS,NotebookEntity.class);
-		modelMap.put(NormalExcelConstants.PARAMS,new ExportParams("notebook列表", "导出人:"+ResourceUtil.getSessionUser().getRealName(),
+		CriteriaQuery cq = new CriteriaQuery(SelfOaServiceEntity.class, dataGrid);
+		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, selfOaService, request.getParameterMap());
+		List<SelfOaServiceEntity> selfOaServices = this.selfOaServiceService.getListByCriteriaQuery(cq,false);
+		modelMap.put(NormalExcelConstants.FILE_NAME,"self_oa_service");
+		modelMap.put(NormalExcelConstants.CLASS,SelfOaServiceEntity.class);
+		modelMap.put(NormalExcelConstants.PARAMS,new ExportParams("self_oa_service列表", "导出人:"+ResourceUtil.getSessionUser().getRealName(),
 			"导出信息"));
-		modelMap.put(NormalExcelConstants.DATA_LIST,notebooks);
+		modelMap.put(NormalExcelConstants.DATA_LIST,selfOaServices);
 		return NormalExcelConstants.JEECG_EXCEL_VIEW;
 	}
 	/**
@@ -381,11 +319,11 @@ public class NotebookController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(params = "exportXlsByT")
-	public String exportXlsByT(NotebookEntity notebook,HttpServletRequest request,HttpServletResponse response
+	public String exportXlsByT(SelfOaServiceEntity selfOaService,HttpServletRequest request,HttpServletResponse response
 			, DataGrid dataGrid,ModelMap modelMap) {
-    	modelMap.put(NormalExcelConstants.FILE_NAME,"notebook");
-    	modelMap.put(NormalExcelConstants.CLASS,NotebookEntity.class);
-    	modelMap.put(NormalExcelConstants.PARAMS,new ExportParams("notebook列表", "导出人:"+ResourceUtil.getSessionUser().getRealName(),
+    	modelMap.put(NormalExcelConstants.FILE_NAME,"self_oa_service");
+    	modelMap.put(NormalExcelConstants.CLASS,SelfOaServiceEntity.class);
+    	modelMap.put(NormalExcelConstants.PARAMS,new ExportParams("self_oa_service列表", "导出人:"+ResourceUtil.getSessionUser().getRealName(),
     	"导出信息"));
     	modelMap.put(NormalExcelConstants.DATA_LIST,new ArrayList());
     	return NormalExcelConstants.JEECG_EXCEL_VIEW;
@@ -406,9 +344,9 @@ public class NotebookController extends BaseController {
 			params.setHeadRows(1);
 			params.setNeedSave(true);
 			try {
-				List<NotebookEntity> listNotebookEntitys = ExcelImportUtil.importExcel(file.getInputStream(),NotebookEntity.class,params);
-				for (NotebookEntity notebook : listNotebookEntitys) {
-					notebookService.save(notebook);
+				List<SelfOaServiceEntity> listSelfOaServiceEntitys = ExcelImportUtil.importExcel(file.getInputStream(),SelfOaServiceEntity.class,params);
+				for (SelfOaServiceEntity selfOaService : listSelfOaServiceEntitys) {
+					selfOaServiceService.save(selfOaService);
 				}
 				j.setMsg("文件导入成功！");
 			} catch (Exception e) {
@@ -427,15 +365,15 @@ public class NotebookController extends BaseController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public List<NotebookEntity> list() {
-		List<NotebookEntity> listNotebooks=notebookService.getList(NotebookEntity.class);
-		return listNotebooks;
+	public List<SelfOaServiceEntity> list() {
+		List<SelfOaServiceEntity> listSelfOaServices=selfOaServiceService.getList(SelfOaServiceEntity.class);
+		return listSelfOaServices;
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
-		NotebookEntity task = notebookService.get(NotebookEntity.class, id);
+		SelfOaServiceEntity task = selfOaServiceService.get(SelfOaServiceEntity.class, id);
 		if (task == null) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
@@ -444,23 +382,23 @@ public class NotebookController extends BaseController {
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<?> create(@RequestBody NotebookEntity notebook, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<?> create(@RequestBody SelfOaServiceEntity selfOaService, UriComponentsBuilder uriBuilder) {
 		//调用JSR303 Bean Validator进行校验，如果出错返回含400错误码及json格式的错误信息.
-		Set<ConstraintViolation<NotebookEntity>> failures = validator.validate(notebook);
+		Set<ConstraintViolation<SelfOaServiceEntity>> failures = validator.validate(selfOaService);
 		if (!failures.isEmpty()) {
 			return new ResponseEntity(BeanValidators.extractPropertyAndMessage(failures), HttpStatus.BAD_REQUEST);
 		}
 
 		//保存
 		try{
-			notebookService.save(notebook);
+			selfOaServiceService.save(selfOaService);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
 		//按照Restful风格约定，创建指向新任务的url, 也可以直接返回id或对象.
-		String id = notebook.getId();
-		URI uri = uriBuilder.path("/rest/notebookController/" + id).build().toUri();
+		String id = selfOaService.getId();
+		URI uri = uriBuilder.path("/rest/selfOaServiceController/" + id).build().toUri();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(uri);
 
@@ -468,16 +406,16 @@ public class NotebookController extends BaseController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> update(@RequestBody NotebookEntity notebook) {
+	public ResponseEntity<?> update(@RequestBody SelfOaServiceEntity selfOaService) {
 		//调用JSR303 Bean Validator进行校验，如果出错返回含400错误码及json格式的错误信息.
-		Set<ConstraintViolation<NotebookEntity>> failures = validator.validate(notebook);
+		Set<ConstraintViolation<SelfOaServiceEntity>> failures = validator.validate(selfOaService);
 		if (!failures.isEmpty()) {
 			return new ResponseEntity(BeanValidators.extractPropertyAndMessage(failures), HttpStatus.BAD_REQUEST);
 		}
 
 		//保存
 		try{
-			notebookService.saveOrUpdate(notebook);
+			selfOaServiceService.saveOrUpdate(selfOaService);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -490,6 +428,6 @@ public class NotebookController extends BaseController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable("id") String id) {
-		notebookService.deleteEntityById(NotebookEntity.class, id);
+		selfOaServiceService.deleteEntityById(SelfOaServiceEntity.class, id);
 	}
 }

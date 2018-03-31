@@ -18,8 +18,6 @@
    <t:dgCol title="修改日期"  field="modifyDate" hidden="true" formatter="yyyy-MM-dd"  queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="是否完成"  field="enable"  hidden="true"  queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="是否过期"  field="isPass"  hidden="true"  queryMode="group"  width="120"></t:dgCol>
-   <t:dgToolBar title="添加备忘" icon="icon-add" url="notebookController.do?goAdd" funname="add"></t:dgToolBar>
-   <t:dgToolBar title="编辑备忘" icon="icon-edit" url="notebookController.do?goUpdate" funname="update"></t:dgToolBar>
    <t:dgToolBar title="批量删除"  icon="icon-remove" url="notebookController.do?doBatchDel" funname="deleteALLSelect"></t:dgToolBar>
 <%--    <t:dgToolBar title="查看" icon="icon-search" url="notebookController.do?goUpdate" funname="detail"></t:dgToolBar> --%>
    <t:dgToolBar title="导入" icon="icon-put" funname="ImportXls"></t:dgToolBar>

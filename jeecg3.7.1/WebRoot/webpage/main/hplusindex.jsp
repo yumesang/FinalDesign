@@ -214,8 +214,8 @@
                     <div class="ibox-content timeline" style="height: 100px;">                                              
                         <div class="timeline-item">
                             <div class="row">
-                            	<c:if test="${notebook == null }"><div style="margin-left: 110px;margin-top: 20px;font-size: 20px;color: #CDCDC1">暂无备忘</div></c:if>
-                            	<c:if test="${notebook == null }">${notebook }</c:if>
+                            	<c:if test="${showNotebook == null }"><div style="margin-left: 110px;margin-top: 20px;font-size: 20px;color: #CDCDC1">暂无备忘</div></c:if>
+                            	<c:if test="${showNotebook != null }">${showNotebook }</c:if>
                             </div>
                         </div>
                     </div>
@@ -296,6 +296,14 @@
  		var title = "添加备忘";
  		openwindow(title, "notebookController.do?list","dgList",1000,600);
  	}
+ 	
+ 	function showNotebookDetail(id){
+ 		var title = "我的备忘录";
+		var url = "notebookController.do?previewList&id="+id;
+		openwindow(title,url,'dgList',450,100);
+		$.ajax({success:function(data){$("#notebookList").datagrid('reload');}})
+ 	}
+ 	
  	function jumpToHplusHome(){
  		var title = "作品说明手册";
  		addOneTab(title, "loginController.do?hplushome2");

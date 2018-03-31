@@ -591,8 +591,27 @@ public class LoginController extends BaseController{
 		table.put("scientific", scientific);
 		table.put("support", support);
 		table.put("other", other);
+		
+		//备忘录
+		String notebookSql = "select t.task_name , t.target_date, t.id from notebook t where t.enable=0 order by target_date desc";
+		List<Object[]> notebookList = systemService.findListbySql(notebookSql);
+		String showNotebook = "<ol><li>";
+		for(int i = 0; i < notebookList.size(); i++){
+			Object[] obj = notebookList.get(i);
+			String id = obj[2].toString();
+			if(i == notebookList.size()-1){
+				showNotebook += "<a onclick=\"showNotebookDetail( '"+ id +"')\" href=\"#\">" + obj[0] + " ("  + obj[1].toString().substring(5,16) + "前完成)</a></li></ol>";
+			}else{
+				showNotebook += "<a onclick=\"showNotebookDetail( '"+ id +"')\" href=\"#\">" + obj[0] + " ("  + obj[1].toString().substring(5,16) + "前完成)</a></li><li><a>";
+			}
+		}
+		if(showNotebook.equals("<ol><li>")){
+			showNotebook = null;
+		}
+		
 		request.setAttribute("printWord", printWord);
 		request.setAttribute("table", table);
+		request.setAttribute("showNotebook", showNotebook);
 		
 		return new ModelAndView("main/hplusindex");
 	}
