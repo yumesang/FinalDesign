@@ -161,7 +161,7 @@ public class BaseTableController extends BaseController {
 			String[] selfStrName = String.valueOf(map.get("self_string_name")).split(",");
 			String[] selfStr = String.valueOf(map.get("self_string")).split(",");
 			for(int i=0;i<selfStr.length;i++){
-				if(selfStr[i].split(":")[0].equals("input")){
+				if(selfStr[i].split(":")[0].equals("input") && !selfStr.equals(":")){
 					if(selfStr[i].split(":")[1].equals("small")){smallMap.put(String.valueOf(smallNum), selfStrName[i]);smallNum++;}
 					if(selfStr[i].split(":")[1].equals("normal")){normalMap.put(String.valueOf(normalNum), selfStrName[i]);normalNum++;}
 					if(selfStr[i].split(":")[1].equals("big")){bigMap.put(String.valueOf(bigNum), selfStrName[i]);bigNum++;}
@@ -182,7 +182,10 @@ public class BaseTableController extends BaseController {
 			smallStr = "<tr>";
 		}
 		for(int i=0;i<smallList.get(0).size();i++){	
-			String[] str = smallList.get(0).get(String.valueOf(i)).toString().split(":");				
+			String[] str = smallList.get(0).get(String.valueOf(i)).toString().split(":");	
+			if(str==null || (str != null && str.length == 0)){
+				smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'></td><td class='pcd_left_td_normal' style='heigth:20px'>";												
+			}else{
 			if(str.length < 2 && str.length!=0){
 					smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' style='heigth:20px'>";								
 			}else if(str[0].equals("") && trNum != 0 && str.length!=0){
@@ -201,6 +204,7 @@ public class BaseTableController extends BaseController {
 				for(int selectNum=0;selectNum<str[2].split("-").length;selectNum++){
 					smallStr += "<div style='float:left;'><input name='"+ str[1]+i +"' type='"+ str[1] +"' value='"+ str[1] +"'/>"+ str[2].split("-")[selectNum] +"</div>";
 				}
+			}
 			}
 			smallStr += "</td>";
 			trNum++;
