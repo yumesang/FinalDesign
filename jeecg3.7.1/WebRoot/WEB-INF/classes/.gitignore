@@ -10,15 +10,4 @@
 /log4j.properties
 /online
 /org
-/p3
-/rebel.xml
-/spring-minidao.xml
-/spring-mvc-aop.xml
-/spring-mvc-context.xml
-/spring-mvc-hibernate.xml
-/spring-mvc-timeTask.xml
-/spring-mvc.xml
-/sso.properties
-/sysConfig.properties
 /test
-/velocity.properties

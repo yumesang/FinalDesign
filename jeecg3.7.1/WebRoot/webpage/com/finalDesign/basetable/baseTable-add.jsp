@@ -109,6 +109,18 @@
 					</tr>
 				<tr style="height: 80px;">
 					<td align="right">
+						<label class="Validform_label">绑定流程:</label>
+					</td>
+					<td class="value">
+					    <select  id="oaId" name="oaId">
+					    	<option value="">---请选择---</option>
+					    </select>        		
+						<span class="Validform_checktip"></span>
+						<label class="Validform_label" style="display: none;">绑定流程</label>
+					</td>
+				</tr>
+				<tr style="height: 80px;">
+					<td align="right">
 							<label class="Validform_label">选择表格参数:</label>
 					</td>
 					<td colspan="3" align="center">

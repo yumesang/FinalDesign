@@ -138,6 +138,7 @@ public class BaseTableController extends BaseController {
 	@RequestMapping(params = "printView")
 	public ModelAndView printData(HttpServletRequest request ,String id ,String useToken) {
 		String sql="select list_name,list_type,name,age,sex,profession,depart_name,memo,self_string_name,self_string from base_table t where t.id = '"+ id +"'";
+		String stringId = "";
 		List<Map<String, Object>> resultList=systemService.findForJdbc(sql);
 		List<Map<String, Object>> smallList = new ArrayList<Map<String,Object>>();
 		List<Map<String, Object>> normalList = new ArrayList<Map<String,Object>>();
@@ -183,12 +184,19 @@ public class BaseTableController extends BaseController {
 		}
 		for(int i=0;i<smallList.get(0).size();i++){	
 			String[] str = smallList.get(0).get(String.valueOf(i)).toString().split(":");	
+			if(str[0].equals("姓名")){stringId = "name";}
+			else if(str[0].equals("年龄")){stringId = "age";}
+			else if(str[0].equals("性别")){stringId = "sex";}
+			else if(str[0].equals("职称")){stringId = "profession";}
+			else if(str[0].equals("系别")){stringId = "departName";}
+			else if(str[0].equals("备注")){stringId = "memo";}
+			else if(!str[0].equals("")){stringId = "selfString";}
 			if(str==null || (str != null && str.length == 0)){
 				smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'></td><td class='pcd_left_td_normal' style='heigth:20px'>";												
 			}else{
-			if(str.length < 2 && str.length!=0){
-					smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' style='heigth:20px'>";								
-			}else if(str[0].equals("") && trNum != 0 && str.length!=0){
+			if(str.length < 2 && str.length!=0){					
+				smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'><strong name='"+ stringId +"Name'>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' style='heigth:60px;'><input class='inputxt' name="+ stringId +" value='' />";								
+			}else if(str[0].equals("") && trNum != 0 && str.length!=0 || str[0].equals("null")){
 				smallStr += "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'></td><td>";
 			}else{
 				if(str[2].split("-").length >= 5){
@@ -196,14 +204,21 @@ public class BaseTableController extends BaseController {
 						if(trNum != 0)
 						smallStr+= "<td class='pcd_left_td_normal' style='width:50px;heigth:20px'></td><td class='pcd_left_td_normal' style='heigth:20px'>";
 					}
-					smallStr += "</tr><tr><td class='pcd_left_td_normal' style='heigth:20px'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='heigth:20px'>";			
+					if(str[1].equals("checkBox")){
+						smallStr += "</tr><tr><td class='pcd_left_td_normal' style='heigth:20px'><strong name='checkBoxName'>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='heigth:20px'>";								
+					}else{
+						smallStr += "</tr><tr><td class='pcd_left_td_normal' style='heigth:20px'><strong name='radioName'>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='heigth:20px'>";								
+					}
 					trNum = 3;
+					for(int selectNum=0;selectNum<str[2].split("-").length;selectNum++){
+						smallStr += "<div style='float:left;margin-left:20px;'><input name='"+ str[1]+i +"' type='"+ str[1] +"' value='"+ str[2].split("-")[selectNum] +"'/>"+ str[2].split("-")[selectNum] +"</div>";
+					}
 				}else{
-					smallStr += "<td class='pcd_left_td_normal' style='heigth:20px'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' style='heigth:20px'>";			
+					smallStr += "<td class='pcd_left_td_normal' style='heigth:20px'><strong name='radioName'>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' style='heigth:20px'>";			
+					for(int selectNum=0;selectNum<str[2].split("-").length;selectNum++){
+						smallStr += "<div style='float:left;margin-left:3px;'><input name='"+ str[1]+i +"' type='"+ str[1] +"' value='"+ str[2].split("-")[selectNum] +"'/>"+ str[2].split("-")[selectNum] +"</div>";
+					}
 				}	
-				for(int selectNum=0;selectNum<str[2].split("-").length;selectNum++){
-					smallStr += "<div style='float:left;'><input name='"+ str[1]+i +"' type='"+ str[1] +"' value='"+ str[1] +"'/>"+ str[2].split("-")[selectNum] +"</div>";
-				}
 			}
 			}
 			smallStr += "</td>";
@@ -223,21 +238,28 @@ public class BaseTableController extends BaseController {
 		for(int i=0;i<normalList.get(0).size();i++){
 			String[] str = normalList.get(0).get(String.valueOf(i)).toString().split(":");
 			if(str.length <= 1){
-				normalStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:50px;'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:50px'></td></tr>";
+				if(str[0].equals("备注")){
+					stringId = "memo";
+				}else{
+					stringId = "selfString";
+				}
+				normalStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:50px;'><strong name='"+ stringId +"Name'>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:50px'><textarea name='"+ stringId +"' rows='1' cols='10' style='font-size:15px;margin: 0px; width: 840px; height: 90px;'></textarea></td></tr>";
 			}
 		}
 		//基础200px方格搭建
 		for(int i=0;i<bigList.get(0).size();i++){
+			stringId = "selfString";
 			String[] str = bigList.get(0).get(String.valueOf(i)).toString().split(":");
 			if(str.length <= 1){
-				bigStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:200px;'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:200px'></td></tr>";
+				bigStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:200px;'><strong name='"+ stringId +"Name'>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:200px'><textarea name='"+ stringId +"' rows='1' cols='10' style='font-size:15px;margin: 0px; width: 840px; height: 200px;'></textarea></td></tr>";
 			}
 		}
 		//基础500px方格搭建
 		for(int i=0;i<biggestList.get(0).size();i++){
+			stringId = "selfString";
 			String[] str = biggestList.get(0).get(String.valueOf(i)).toString().split(":");
 			if(str.length <= 1){
-				biggestStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:500px;'><strong>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:500px'></td></tr>";
+				biggestStr += "<tr><td class='pcd_left_td_normal' style='width:50px;height:500px;'><strong name='"+ stringId +"Name'>"+ str[0] +"</strong></td><td class='pcd_left_td_normal' colspan='5' style='height:500px'><textarea name='"+ stringId +"' rows='1' cols='10' style='font-size:15px;margin: 0px; width: 840px; height: 500px;'></textarea></td></tr>";
 			}
 		}
 		//传回jsp
