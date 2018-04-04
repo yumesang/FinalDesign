@@ -1,6 +1,7 @@
 package com.finalDesign.basetable.controller;
 import com.finalDesign.basetable.entity.BaseTableEntity;
 import com.finalDesign.basetable.service.BaseTableServiceI;
+import com.sun.corba.se.spi.oa.OADefault;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -412,8 +413,14 @@ public class BaseTableController extends BaseController {
 	public ModelAndView goAdd(BaseTableEntity baseTable, HttpServletRequest req) {
 		if (StringUtil.isNotEmpty(baseTable.getId())) {
 			baseTable = baseTableService.getEntity(BaseTableEntity.class, baseTable.getId());
-			req.setAttribute("baseTablePage", baseTable);
+			req.setAttribute("baseTablePage", baseTable);			
+			}
+		String oaList = "";
+		List<Object[]> myOaList = systemService.findListbySql("select t.oa_name, t.id from self_oa_service t where 1=1");
+		for(Object[] obj : myOaList){
+			oaList += "<option value="+ obj[1] +">"+ obj[0] +"</option>";			
 		}
+		req.setAttribute("oaList", oaList);
 		return new ModelAndView("com/finalDesign/basetable/baseTable-add");
 	}
 	/**
@@ -425,8 +432,7 @@ public class BaseTableController extends BaseController {
 	public ModelAndView goUpdate(BaseTableEntity baseTable, HttpServletRequest req) {
 		if (StringUtil.isNotEmpty(baseTable.getId())) {
 			baseTable = baseTableService.getEntity(BaseTableEntity.class, baseTable.getId());
-			if(baseTable.getSelfString()!=null){				
-			
+			if(baseTable.getSelfString()!=null){						
 			String[] selfStringNum = baseTable.getSelfString().split(",");	
 			String selfStringName = baseTable.getSelfStringName();
 			List<String> selfStringList = new ArrayList<String>();
@@ -434,11 +440,22 @@ public class BaseTableController extends BaseController {
 				selfStringList.add(str);
 			}
 			String myselfStringList = String.valueOf(selfStringList).replace("[", "");
-			myselfStringList = String.valueOf(myselfStringList).replace("]", "");			
+			myselfStringList = String.valueOf(myselfStringList).replace("]", "");		
 			req.setAttribute("selfStringNum", selfStringNum.length);
 			req.setAttribute("selfStringList", myselfStringList);
 			req.setAttribute("selfStringName", selfStringName);
 			}
+			String oaList = "";
+			List<Object[]> myOaList = systemService.findListbySql("select t.oa_name, t.id from self_oa_service t where 1=1");
+			for(Object[] obj : myOaList){
+				if(obj[1].equals(baseTable.getOaId())){
+					oaList += "<option selected='selected' value="+ obj[1] +">"+ obj[0] +"</option>";						
+				}else{
+					oaList += "<option value="+ obj[1] +">"+ obj[0] +"</option>";						
+				}
+		
+			}
+			req.setAttribute("oaList", oaList);
 			req.setAttribute("baseTablePage", baseTable);
 		}
 		return new ModelAndView("com/finalDesign/basetable/baseTable-update");

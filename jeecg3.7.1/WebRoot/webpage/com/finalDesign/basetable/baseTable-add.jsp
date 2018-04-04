@@ -91,11 +91,14 @@
 							表格名称:
 						</label>
 					</td>
-					<td class="value">
-					     	 <input id="listName" name="listName" type="text" style="width: 150px" class="inputxt"  datatype="*" />
+					<td class="value" colspan="3">
+					     	 <input id="listName" name="listName" type="text" style="width: 515px" class="inputxt"  datatype="*" />
 							<span class="Validform_checktip"></span>
 							<label class="Validform_label" style="display: none;">表格名称</label>
 						</td>
+					
+					</tr>
+				<tr>
 					<td align="right">
 						<label class="Validform_label">
 							表格类型:
@@ -105,15 +108,14 @@
 							<t:dictSelect field="listType" type="list"  typeGroupCode="list_type"  defaultVal="${baseTablePage.listType}" hasLabel="false"  title="表格类型" datatype="*" ></t:dictSelect>     
 							<span class="Validform_checktip"></span>
 							<label class="Validform_label" style="display: none;">表格类型</label>
-						</td>
-					</tr>
-				<tr style="height: 80px;">
+					</td>
 					<td align="right">
 						<label class="Validform_label">绑定流程:</label>
 					</td>
 					<td class="value">
 					    <select  id="oaId" name="oaId">
 					    	<option value="">---请选择---</option>
+					    	${oaList }
 					    </select>        		
 						<span class="Validform_checktip"></span>
 						<label class="Validform_label" style="display: none;">绑定流程</label>

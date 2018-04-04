@@ -97,9 +97,6 @@ public class BaseTableEntity implements java.io.Serializable {
 	private java.lang.Boolean enable;
 	@Excel(name="流程ID",width=15)
 	private java.lang.String oaId;
-	/**是否启用*/
-	@Excel(name="流程名称",width=15)
-	private java.lang.String oaName;
 	
 	/**
 	 *方法: 取得java.lang.String
@@ -490,18 +487,5 @@ public class BaseTableEntity implements java.io.Serializable {
 	 */
 	public void setOaId(java.lang.String oaId){
 		this.oaId = oaId;
-	}
-	
-	@Column(name ="OA_NAME",nullable=true,length=50)
-	public java.lang.String getOaName(){
-		return this.oaName;
-	}
-
-	/**
-	 *方法: 设置java.lang.String
-	 *@param: java.lang.String  表格名称
-	 */
-	public void setOaName(java.lang.String oaName){
-		this.oaName = oaName;
 	}
 }

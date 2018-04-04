@@ -63,7 +63,7 @@
 					<input id="id" name="id" type="hidden" value="${detailTablePage.id }"/>
 		<table style="width: 980px;" cellpadding="0" cellspacing="1" class="formtable">
 				<tr>
-					<td align="right">
+					<td align="right" style="width: 30px;">
 						<label class="Validform_label">
 							表格名称:
 						</label>
@@ -86,12 +86,12 @@
 							<span class="Validform_checktip"></span>
 							<label class="Validform_label" style="display: none;">OAID</label>
 						</td>					
-					<td align="right">
+					<td align="right" hidden="hidden">
 						<label class="Validform_label">
 							OA名称:
 						</label>
 					</td>
-					<td class="value">
+					<td class="value" hidden="hidden">
 					     	 <input id="oaName" name="oaName" type="text" style="width: 150px" class="inputxt"  ignore="ignore" />
 							<span class="Validform_checktip"></span>
 							<label class="Validform_label" style="display: none;">OA名称</label>
@@ -267,7 +267,7 @@
  	
  	//多选框自定义字段
  	for(var i=0;i<selfCheckBoxName.length;i++){			
- 		if(selfString == ""){		
+ 		if(selfStringName == ""){		
  			selfStringName += selfCheckBoxName[i].innerHTML;				
  		}else{			
  		 	selfStringName += ","+selfCheckBoxName[i].innerHTML;		

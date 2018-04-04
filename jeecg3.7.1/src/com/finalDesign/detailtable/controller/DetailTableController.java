@@ -1,4 +1,5 @@
 package com.finalDesign.detailtable.controller;
+import com.alibaba.druid.util.DaemonThreadFactory;
 import com.finalDesign.detailtable.entity.DetailTableEntity;
 import com.finalDesign.detailtable.service.DetailTableServiceI;
 
@@ -200,6 +201,7 @@ public class DetailTableController extends BaseController {
 		AjaxJson j = new AjaxJson();
 		message = "detail_table添加成功";
 		try{
+			detailTable.setOaId(systemService.findListbySql("select t.oa_id from base_table t where t.id = '"+ detailTable.getListName() +"'").get(0).toString());
 			detailTable.setCheckStatus("0");
 			detailTable.setCreateUserId(ResourceUtil.getSessionUser().getId());
 			detailTable.setCreateDate(new Date());
@@ -257,7 +259,7 @@ public class DetailTableController extends BaseController {
 		List<Object[]> listNameList = systemService.findListbySql(listNameSql);
 		for(Object[] obj:listNameList){
 			listName += "<option value="+ obj[0] +">"+ obj[1] +"</option>";
-		}
+		}		
 		req.setAttribute("listName", listName);
 		req.setAttribute("detailTablePage", detailTable);
 		return new ModelAndView("com/finalDesign/detailtable/detailTable-add");
