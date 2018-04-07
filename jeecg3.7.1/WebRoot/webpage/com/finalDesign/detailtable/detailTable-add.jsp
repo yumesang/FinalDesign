@@ -76,16 +76,7 @@
 							<span class="Validform_checktip"></span>
 							<label class="Validform_label" style="display: none;">表格名称</label>
 						</td>	
-					<td align="right" hidden="hidden">
-						<label class="Validform_label">
-							OAID:
-						</label>
-					</td>
-					<td class="value" hidden="hidden">
-					     	 <input id="oaId" name="oaId" type="text" style="width: 150px" class="inputxt"  ignore="ignore" />
-							<span class="Validform_checktip"></span>
-							<label class="Validform_label" style="display: none;">OAID</label>
-						</td>					
+								
 					<td align="right" hidden="hidden">
 						<label class="Validform_label">
 							OA名称:
@@ -290,16 +281,15 @@
  			}						
  		}
  	}
- 	
- 	$("#selfString").prop("value",selfString); 
- 	$("#selfStringName").prop("value",selfStringName);
  	for(var i = 0; i < listValue.length;i++){
  		var str = "#"+listValue[i].name;
  		$(str).val(listValue[i].value);
  		$("#printfrm").contents().find("input[class='inputxt']").prop({"style":"background-color:#EDEDED","readonly":"readonly"});
  		$("#printfrm").contents().find("#selfString").prop({"style":"background-color:#EDEDED","readonly":"readonly"}); 
  	}
- 	$("[name=memo]").prop("value",$("#printfrm").contents().find("#memo").val());
+ 	$("#selfString").prop("value",selfString); 
+ 	$("#selfStringName").prop("value",selfStringName);
+ 	$("#memo").val($("#printfrm").contents().find("[name='memo']").val());
  	$(buttonId).prop("style","display:none;");
  	$("#goAddBtn").prop("style","height:33px;width: 85px;");
  	

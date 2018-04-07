@@ -7,7 +7,7 @@
    <t:dgCol title="id"  field="id"  hidden="true"  queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="操作" align="center" field="opt" width="100"></t:dgCol>
    <t:dgDelOpt title="删除" url="detailTableController.do?doDel&id={id}" urlclass="ace_button"  urlfont="fa-trash-o"/>
-   <t:dgFunOpt title="查看" funname="showDetail(id)" urlclass="ace_button"  urlfont="fa-search" />
+   <t:dgFunOpt title="查看" funname="showDetail(listName,id)" urlclass="ace_button"  urlfont="fa-search" />
    <t:dgCol title="表格名称"  field="listName" dictionary="base_table,id,list_name" align="center" queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="表格类型"  field="listType"  queryMode="group" align="center" width="120"></t:dgCol>
    <t:dgCol title="OAID"  field="oaId" hidden="true" queryMode="group"  width="120"></t:dgCol>
@@ -27,7 +27,7 @@
    <t:dgCol title="OA名称"  field="oaName" hidden="true" queryMode="group"  width="120"></t:dgCol>
    <t:dgToolBar title="录入" icon="icon-add" url="#" funname="goAdd"></t:dgToolBar>
    <t:dgToolBar title="编辑" icon="icon-edit" url="detailTableController.do?goUpdate" funname="update"></t:dgToolBar>
-   <t:dgToolBar title="查看" icon="icon-search" url="detailTableController.do?goUpdate" funname="detail"></t:dgToolBar>
+<%--    <t:dgToolBar title="查看" icon="icon-search" url="baseTableController.do?goUpdate" funname="detail"></t:dgToolBar> --%>
    <t:dgToolBar title="导入" icon="icon-put" funname="ImportXls"></t:dgToolBar>
    <t:dgToolBar title="导出" icon="icon-putout" funname="ExportXls"></t:dgToolBar>
    <t:dgToolBar title="模板下载" icon="icon-putout" funname="ExportXlsByT"></t:dgToolBar>
@@ -39,11 +39,11 @@
  $(document).ready(function(){
  });
  
-function showDetail(id){
+function showDetail(listName,id){
 	var title = "查看内容";
-	var url = "detailTableController.do?goUpdate&id="+id;
+ 	var url = "baseTableController.do?printCheck&id="+listName+"&detailId="+id;
 	openwindow(title,url,'dgList',1000,500);
-	$.ajax({success:function(data){$("#detailTableList").datagrid('reload');}})
+	$.ajax({success:function(data){$("#detailTableList").datagrid('reload');}}) 
 }  
 
 function goAdd(){
