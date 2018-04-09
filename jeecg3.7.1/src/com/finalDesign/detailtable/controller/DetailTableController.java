@@ -2,6 +2,11 @@ package com.finalDesign.detailtable.controller;
 import com.alibaba.druid.util.DaemonThreadFactory;
 import com.finalDesign.detailtable.entity.DetailTableEntity;
 import com.finalDesign.detailtable.service.DetailTableServiceI;
+import com.finalDesign.flowtaskinfo.entity.FlowTaskInfoEntity;
+import com.finalDesign.flowtaskinfo.service.FlowTaskInfoServiceI;
+import com.finalDesign.selfoaservice.controller.SelfOaServiceController;
+import com.finalDesign.selfoaservice.entity.SelfOaServiceEntity;
+import com.finalDesign.selfoaservice.service.SelfOaServiceServiceI;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -95,7 +100,11 @@ public class DetailTableController extends BaseController {
 	@Autowired
 	private DetailTableServiceI detailTableService;
 	@Autowired
+	private SelfOaServiceServiceI selfOaServiceService;
+	@Autowired
 	private SystemService systemService;
+	@Autowired
+	private FlowTaskInfoServiceI flowTaskInfoService;
 	@Autowired
 	private Validator validator;
 	
@@ -207,6 +216,19 @@ public class DetailTableController extends BaseController {
 			detailTable.setCreateDate(new Date());
 			detailTable.setCreateUserName(ResourceUtil.getSessionUser().getRealName());
 			detailTableService.save(detailTable);
+			FlowTaskInfoEntity flowTaskInfo = new FlowTaskInfoEntity();
+			flowTaskInfo.setCode(detailTable.getId());
+			flowTaskInfo.setCeateUserId(detailTable.getCreateUserId());
+			flowTaskInfo.setCheckStatus(0);//改变状态为未审核
+			flowTaskInfo.setCreateDate(detailTable.getCreateDate());
+			List<Object[]> list = systemService.findListbySql("select t.node_num ,t.oa_detail_id from self_oa_service t where t.id = '"+ detailTable.getOaId() +"'");
+			flowTaskInfo.setNodeNum(Integer.parseInt(list.get(0)[0].toString()));
+			flowTaskInfo.setCheckUserId(list.get(0)[1].toString().split("-")[flowTaskInfo.getCheckStatus()]);
+			String listName = systemService.findListbySql("select t.list_name from base_table t where id = '"+detailTable.getListName()+"'").get(0).toString();
+			flowTaskInfo.setTaskName("请您审核来自"+ detailTable.getCreateUserName() +"的《"+ listName +"》");
+			flowTaskInfo.setUrl("baseTableController.do?printCheck&id="+detailTable.getListName()+"&detailId="+detailTable.getId()+"&check=check");
+			systemService.saveOrUpdate(flowTaskInfo);
+			
 			systemService.addLog(message, Globals.Log_Type_INSERT, Globals.Log_Leavel_INFO);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -237,6 +259,71 @@ public class DetailTableController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			message = "detail_table更新失败";
+			throw new BusinessException(e.getMessage());
+		}
+		j.setMsg(message);
+		return j;
+	}
+	
+	
+	/**
+	 * 审核detail_table
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(params = "doCheck")
+	@ResponseBody
+	public AjaxJson doCheck(HttpServletRequest request, String id) {
+		String message = null;
+		AjaxJson j = new AjaxJson();
+		String detailId = systemService.findListbySql("select t.id from detail_table t where t.list_name ='"+ id +"'").get(0).toString();
+		DetailTableEntity t = detailTableService.get(DetailTableEntity.class, detailId);
+		SelfOaServiceEntity selfOaService = selfOaServiceService.get(SelfOaServiceEntity.class, t.getOaId());
+		if(Integer.parseInt(t.getCheckStatus()) < selfOaService.getNodeNum()-1){
+			message = "审核通过，提交下一节点人员处理";
+			t.setCheckStatus(String.valueOf((Integer.parseInt(t.getCheckStatus()) + 1)));
+			String nodeId = selfOaService.getOaDetailId().split("-")[Integer.parseInt(t.getCheckStatus())].replace("-", ","); 
+			systemService.executeSql("update flow_task_info set check_status = '"+ t.getCheckStatus() +"',check_user_id='"+ nodeId +"' where code = '"+ t.getId() +"'");			
+		}else{
+			message = "审核通过，当前申请已过审";
+			t.setCheckStatus("5");
+			t.setCreateDate(new Date());
+			String listName = systemService.findListbySql("select t.list_name from base_table t where id = '"+t.getListName()+"'").get(0).toString();
+			systemService.executeSql("update flow_task_info set task_name='您申请的《"+ listName +"》已通过审核!', check_status = '"+ t.getCheckStatus() +"',check_user_id='"+ t.getCreateUserId() +"' where code = '"+ t.getId() +"'");				
+		}
+		try {	
+			detailTableService.saveOrUpdate(t);
+			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "审核操作失败，请联系管理员处理";
+			throw new BusinessException(e.getMessage());
+		}
+		j.setMsg(message);
+		return j;
+	}
+	
+	/**
+	 * 审核detail_table
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(params = "doNotCheck")
+	@ResponseBody
+	public AjaxJson doNotCheck(DetailTableEntity detailTable, HttpServletRequest request) {
+		String message = null;
+		AjaxJson j = new AjaxJson();
+		message = "驳回审核内容，将结果返回给用户";
+		DetailTableEntity t = detailTableService.get(DetailTableEntity.class, detailTable.getId());
+		try {	
+			MyBeanUtils.copyBeanNotNull2Bean(detailTable, t);
+			detailTableService.saveOrUpdate(t);
+			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "审核操作失败，请联系管理员处理";
 			throw new BusinessException(e.getMessage());
 		}
 		j.setMsg(message);

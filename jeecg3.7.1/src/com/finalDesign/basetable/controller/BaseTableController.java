@@ -273,7 +273,7 @@ public class BaseTableController extends BaseController {
 		request.setAttribute("listType", resultList.get(0).get("list_type"));
 		request.setAttribute("createPerson", ResourceUtil.getSessionUser().getRealName());
 		request.setAttribute("createDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-			return new ModelAndView("com/finalDesign/basetable/printSelfTablePreview");		
+		return new ModelAndView("com/finalDesign/basetable/printSelfTablePreview");		
 	}
 	
 	@RequestMapping(params = "datagrid")
@@ -298,7 +298,7 @@ public class BaseTableController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(params = "printCheck")
-	public ModelAndView printCheck(HttpServletRequest request ,String id ,String detailId, String useToken) {
+	public ModelAndView printCheck(HttpServletRequest request ,String id ,String detailId, String useToken, String check) {
 		DetailTableEntity detailTableEntity = systemService.getEntity(DetailTableEntity.class, detailId);
 		if(StringUtil.isNotEmpty(detailTableEntity.getId())){
 		//将自定义变量分类并且存放于不同的列表中以便显示
@@ -443,6 +443,7 @@ public class BaseTableController extends BaseController {
 								smallStr += "<div style='float:left;margin-left:3px;'><input name='"+ str[1]+i +"' type='"+ str[1] +"' value='"+ str[2].split("-")[selectNum] +"'/>"+ str[2].split("-")[selectNum] +"</div>";
 							}			
 						}
+						radioNameNum++;
 					}else{
 						for(int selectNum=0;selectNum<str[2].split("-").length;selectNum++){	
 							boolean checkValue = false;
@@ -461,6 +462,7 @@ public class BaseTableController extends BaseController {
 								smallStr += "<div style='float:left;margin-left:3px;'><input name='"+ str[1]+i +"' type='"+ str[1] +"' value='"+ str[2].split("-")[selectNum] +"'/>"+ str[2].split("-")[selectNum] +"</div>";
 							}			
 						}
+						radioNameNum++;
 					}
 				}else{
 					if(str[1].equals("checkBox")){
@@ -486,6 +488,7 @@ public class BaseTableController extends BaseController {
 								smallStr += "<div style='float:left;margin-left:3px;'><input name='"+ str[1]+i +"' type='"+ str[1] +"' value='"+ str[2].split("-")[selectNum] +"'/>"+ str[2].split("-")[selectNum] +"</div>";
 							}			
 						}
+						checkBoxNameNum++;
 					}else{
 						for(int selectNum=0;selectNum<str[2].split("-").length;selectNum++){	
 							boolean checkValue = false;
@@ -504,6 +507,7 @@ public class BaseTableController extends BaseController {
 								smallStr += "<div style='float:left;margin-left:3px;'><input name='"+ str[1]+i +"' type='"+ str[1] +"' value='"+ str[2].split("-")[selectNum] +"'/>"+ str[2].split("-")[selectNum] +"</div>";
 							}			
 						}
+						checkBoxNameNum++;
 					}
 				}	
 			}
@@ -562,6 +566,7 @@ public class BaseTableController extends BaseController {
 			}
 		}
 		//传回jsp
+		request.setAttribute("id", id);
 		request.setAttribute("title", resultList.get(0).get("list_name"));
 		request.setAttribute("smallStr", smallStr);
 		request.setAttribute("normalStr", normalStr);
@@ -571,7 +576,11 @@ public class BaseTableController extends BaseController {
 		request.setAttribute("createPerson", ResourceUtil.getSessionUser().getRealName());
 		request.setAttribute("createDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 		}
-		return new ModelAndView("com/finalDesign/basetable/printSelfTablePreview");		
+		if(check != null){
+			return new ModelAndView("com/finalDesign/basetable/baseTable-check");		
+		}else{
+			return new ModelAndView("com/finalDesign/basetable/printSelfTablePreview");	
+		}
 	}
 	
 	/**

@@ -69,7 +69,7 @@
 <body style="overflow-y: hidden" scroll="no">
 <t:formvalid formid="formobj" dialog="true" usePlugin="password" layout="table" action="userController.do?saveUser" beforeSubmit="setOrgIds">
 	<input id="id" name="id" type="hidden" value="${user.id }">
-	<table style="width: 600px;" cellpadding="0" cellspacing="1" class="formtable">
+	<table style="width: 100%;" cellpadding="0" cellspacing="1" class="formtable">
 		<tr>
 			<td align="right" width="25%" nowrap>
                 <label class="Validform_label">  <t:mutiLang langKey="common.username"/>:  </label>
@@ -123,11 +123,17 @@
                 </select> --%>
                 <%--  <t:departSelect departId="${tsDepart.id }" departName="${tsDepart.departname }"></t:departSelect>--%>
                 
-                <input id="departname" name="departname" type="text" readonly="readonly" class="inputxt" datatype="*" value="${departname}">
+                <input id="departname" name="departname" value="${departname}" style="width: 250px;"  class="inputxt" readonly="readonly"/>
+				<input name="orgIds" class="inputxt" id="orgIds" type="hidden"  value="${orgIds}"/>
+				<%--<input id="orgCode" name="orgCode" type="text" />--%>
+				<t:choose hiddenName="orgIds" hiddenid="id"   url="departController.do?selectDepart" name="departList" width="400" height="350"
+					   icon="icon-search" title="选择部门" inputTextname="departname,orgCode" textname="text"  isclear="true" isInit="true"></t:choose>
+                
+                <%--<input id="departname" name="departname" type="text" readonly="readonly" class="inputxt" datatype="*" value="${departname}">
                 <input id="orgIds" name="orgIds" type="hidden" value="${orgIds}">
                 <a href="#" class="easyui-linkbutton" plain="true" icon="icon-search" id="departSearch" onclick="openDepartmentSelect()">选择</a>
                 <a href="#" class="easyui-linkbutton" plain="true" icon="icon-redo" id="departRedo" onclick="callbackClean()">清空</a>
-                <span class="Validform_checktip"><t:mutiLang langKey="please.muti.department"/></span>
+                --%>
             </td>
 		</tr>
 		<tr>

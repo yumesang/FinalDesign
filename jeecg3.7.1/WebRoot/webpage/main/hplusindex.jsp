@@ -30,8 +30,8 @@
                     </div>
                     <div class="ibox-content">
                         <div style="height: 90px;overflow: auto;">    
-                        	<c:if test="${printTask == null }"><div style="margin-left: 380px;margin-top: 30px;font-size: 20px;color: #CDCDC1">暂无需要处理的事务</div></c:if>                       
-                            <c:if test="${printTask != null }">${printTask }</c:if>
+                        	<c:if test="${showTaskInfo == null }"><div style="margin-left: 380px;margin-top: 30px;font-size: 20px;color: #CDCDC1">暂无需要处理的事务</div></c:if>                       
+                            <c:if test="${showTaskInfo != null }">${showTaskInfo }</c:if>
                         </div>                                                                                                                              
                     </div>                                       
                 </div>             
@@ -285,9 +285,8 @@
  		addOneTab(title, "baseNewsController.do?list");
  	}
  	function readMore(){
- 		alert("开发中");
  		var title = "待办事宜";
- 		addOneTab(title, "");
+ 		addOneTab(title, "flowTaskInfoController.do?list");
 /*  		var title = "待办事宜";
  		addOneTab(title, "Controller.do?list"); */
  	}
@@ -322,6 +321,11 @@
 		$.ajax({success:function(data){$('#informList').datagrid('reload');}})  
 	}
 	
+	function showTaskInfoDetail(id,url){
+		var title = "审核";
+		openwindow(title, url,"dgList",1300,550);
+		$.ajax({success:function(data){$('#informList').datagrid('reload');}})  
+	}
 
  	
  </script>
