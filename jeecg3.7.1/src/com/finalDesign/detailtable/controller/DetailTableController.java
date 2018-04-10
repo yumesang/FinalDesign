@@ -157,6 +157,7 @@ public class DetailTableController extends BaseController {
 		detailTable = systemService.getEntity(DetailTableEntity.class, detailTable.getId());
 		message = "detail_table删除成功";
 		try{
+			systemService.executeSql("delete from flow_task_info where code='"+ detailTable.getId() +"'");
 			detailTableService.delete(detailTable);
 			systemService.addLog(message, Globals.Log_Type_DEL, Globals.Log_Leavel_INFO);
 		}catch(Exception e){
@@ -210,10 +211,12 @@ public class DetailTableController extends BaseController {
 		AjaxJson j = new AjaxJson();
 		message = "detail_table添加成功";
 		try{
-			detailTable.setOaId(systemService.findListbySql("select t.oa_id from base_table t where t.id = '"+ detailTable.getListName() +"'").get(0).toString());
+			List<Object[]> baseList = systemService.findListbySql("select t.oa_id,t.list_type from base_table t where t.id = '"+ detailTable.getListName() +"'");
+			detailTable.setOaId(baseList.get(0)[0].toString());
 			detailTable.setCheckStatus("0");
 			detailTable.setCreateUserId(ResourceUtil.getSessionUser().getId());
 			detailTable.setCreateDate(new Date());
+			detailTable.setListType(baseList.get(0)[1].toString());
 			detailTable.setCreateUserName(ResourceUtil.getSessionUser().getRealName());
 			detailTableService.save(detailTable);
 			FlowTaskInfoEntity flowTaskInfo = new FlowTaskInfoEntity();
@@ -280,17 +283,21 @@ public class DetailTableController extends BaseController {
 		String detailId = systemService.findListbySql("select t.id from detail_table t where t.list_name ='"+ id +"'").get(0).toString();
 		DetailTableEntity t = detailTableService.get(DetailTableEntity.class, detailId);
 		SelfOaServiceEntity selfOaService = selfOaServiceService.get(SelfOaServiceEntity.class, t.getOaId());
+		String listName = systemService.findListbySql("select t.list_name from base_table t where id = '"+t.getListName()+"'").get(0).toString();
 		if(Integer.parseInt(t.getCheckStatus()) < selfOaService.getNodeNum()-1){
 			message = "审核通过，提交下一节点人员处理";
 			t.setCheckStatus(String.valueOf((Integer.parseInt(t.getCheckStatus()) + 1)));
 			String nodeId = selfOaService.getOaDetailId().split("-")[Integer.parseInt(t.getCheckStatus())].replace("-", ","); 
-			systemService.executeSql("update flow_task_info set check_status = '"+ t.getCheckStatus() +"',check_user_id='"+ nodeId +"' where code = '"+ t.getId() +"'");			
+			systemService.executeSql("update flow_task_info set task_name='请您审核来自"+ t.getCreateUserName() +"的《"+ listName +"》',check_status = '"+ t.getCheckStatus() +"',check_user_id='"+ nodeId +"' where code = '"+ t.getId() +"'");			
 		}else{
 			message = "审核通过，当前申请已过审";
 			t.setCheckStatus("5");
 			t.setCreateDate(new Date());
-			String listName = systemService.findListbySql("select t.list_name from base_table t where id = '"+t.getListName()+"'").get(0).toString();
-			systemService.executeSql("update flow_task_info set task_name='您申请的《"+ listName +"》已通过审核!', check_status = '"+ t.getCheckStatus() +"',check_user_id='"+ t.getCreateUserId() +"' where code = '"+ t.getId() +"'");				
+			FlowTaskInfoEntity flowTaskInfo = systemService.findUniqueByProperty(FlowTaskInfoEntity.class, "code", t.getId());
+			flowTaskInfo.setTaskName("您申请的《"+ listName +"》已通过审核!");
+			flowTaskInfo.setCheckStatus(Integer.parseInt(t.getCheckStatus()));
+			flowTaskInfo.setCeateUserId(t.getCreateUserId());
+			flowTaskInfo.setUrl(flowTaskInfo.getUrl().substring(0,flowTaskInfo.getUrl().length()-12));
 		}
 		try {	
 			detailTableService.saveOrUpdate(t);
@@ -312,13 +319,17 @@ public class DetailTableController extends BaseController {
 	 */
 	@RequestMapping(params = "doNotCheck")
 	@ResponseBody
-	public AjaxJson doNotCheck(DetailTableEntity detailTable, HttpServletRequest request) {
+	public AjaxJson doNotCheck(String id, HttpServletRequest request) {
 		String message = null;
 		AjaxJson j = new AjaxJson();
 		message = "驳回审核内容，将结果返回给用户";
-		DetailTableEntity t = detailTableService.get(DetailTableEntity.class, detailTable.getId());
+		String detailId = systemService.findListbySql("select t.id from detail_table t where t.list_name ='"+ id +"'").get(0).toString();
+		DetailTableEntity t = detailTableService.get(DetailTableEntity.class, detailId);
+		t.setCheckStatus("6");
+		t.setCreateDate(new Date());
+		String listName = systemService.findListbySql("select t.list_name from base_table t where id = '"+t.getListName()+"'").get(0).toString();
+		systemService.executeSql("update flow_task_info set task_name='您申请的《"+ listName +"》被驳回，请修改后重试!', check_status = '"+ t.getCheckStatus() +"',check_user_id='"+ t.getCreateUserId() +"' where code = '"+ t.getId() +"'");				
 		try {	
-			MyBeanUtils.copyBeanNotNull2Bean(detailTable, t);
 			detailTableService.saveOrUpdate(t);
 			systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 		} catch (Exception e) {

@@ -507,7 +507,7 @@ public class BaseTableController extends BaseController {
 								smallStr += "<div style='float:left;margin-left:3px;'><input name='"+ str[1]+i +"' type='"+ str[1] +"' value='"+ str[2].split("-")[selectNum] +"'/>"+ str[2].split("-")[selectNum] +"</div>";
 							}			
 						}
-						checkBoxNameNum++;
+						radioNameNum++;
 					}
 				}	
 			}

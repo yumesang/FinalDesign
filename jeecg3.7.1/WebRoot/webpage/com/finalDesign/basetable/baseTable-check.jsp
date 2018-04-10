@@ -332,7 +332,7 @@ body{
 		  	 	</tr>
 		    </table>
 	     <div id="pcd_normal_div" style="width:98%;">
-		<table class="pcd_normal_tb" style="width:75%;"align="center">
+		<table class="pcd_normal_tb" style="width:75%;" align="center">
       		<tbody> 				
       			<c:if test="${smallStr.length() !=0 }">${smallStr }</c:if>
       			<c:if test="${normalStr.length() !=0 }">${normalStr }</c:if>
@@ -355,13 +355,23 @@ function doCheck(){
 		url:'detailTableController.do?doCheck&id='+id,
 		dataType:'json',
 		success:function(data){
-			console.log(data);
+			alert(data.msg);
+			frameElement.api.close();
 		}		
 	});  	
 };
 
 function doNotCheck(){
-	alert("doNotCheck");
+	var id = "${id }";
+	alert(id);
+	$.ajax({   
+		url:'detailTableController.do?doNotCheck&id='+id,
+		dataType:'json',
+		success:function(data){
+			alert(data.msg);
+			frameElement.api.close();
+		}		
+	});  
 };
 
 </script>

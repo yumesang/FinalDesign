@@ -268,14 +268,14 @@ body{
           <br/><br/><br/>
 	   <span  style="font: '宋体';font-size: 26px;text-align: center;font-weight: bolder;">${title }</span>
 	    <br/><br/>
-	    <table style="width:98%;">
+	    <table style="width:85%;">
 		  	 	<tr class="pcd_normal_title">	
 <%-- 		  	 	    <td align="left" width="25%">申请人：${createPerson }</td>	 --%>	  
 		  	 		<td align="right" width="25%">制表时间：${createDate }</td>		  	 			  	 		
 		  	 	</tr>
 		    </table>
 	     <div id="pcd_normal_div" style="width:98%;">
-		<table class="pcd_normal_tb" style="width:100%;">
+		<table class="pcd_normal_tb" style="width:75%;" align="center">
       		<tbody> 				
       			<c:if test="${smallStr.length() !=0 }">${smallStr }</c:if>
       			<c:if test="${normalStr.length() !=0 }">${normalStr }</c:if>

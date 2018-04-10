@@ -6,10 +6,10 @@
   <t:datagrid name="detailTableList" checkbox="true" pagination="true" fitColumns="true" title="detail_table" actionUrl="detailTableController.do?datagrid" idField="id" fit="true" queryMode="group">
    <t:dgCol title="id"  field="id"  hidden="true"  queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="操作" align="center" field="opt" width="100"></t:dgCol>
-   <t:dgDelOpt title="删除" url="detailTableController.do?doDel&id={id}" urlclass="ace_button"  urlfont="fa-trash-o"/>
+   <t:dgDelOpt title="删除" url="detailTableController.do?doDel&id={id}" urlclass="ace_button" exp="checkStatus#eq#0" urlfont="fa-trash-o"/>
    <t:dgFunOpt title="查看" funname="showDetail(listName,id)" urlclass="ace_button"  urlfont="fa-search" />
    <t:dgCol title="表格名称"  field="listName" dictionary="base_table,id,list_name" align="center" queryMode="group"  width="120"></t:dgCol>
-   <t:dgCol title="表格类型"  field="listType"  queryMode="group" align="center" width="120"></t:dgCol>
+   <t:dgCol title="表格类型"  field="listType" dictionary="list_type" queryMode="group" align="center" width="120"></t:dgCol>
    <t:dgCol title="OAID"  field="oaId" hidden="true" queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="姓名"  field="name" hidden="true" queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="年龄"  field="age" hidden="true" queryMode="group"  width="120"></t:dgCol>
@@ -20,7 +20,7 @@
    <t:dgCol title="备注"  field="memo" hidden="true" queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="自定义字段名"  field="selfStringName" hidden="true" queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="自定义字段"  field="selfString" hidden="true" queryMode="group"  width="120"></t:dgCol>
-   <t:dgCol title="审核状态"  field="checkStatus" align="center" replace="未审核_0,一级过审_1,二级过审_2,三级过审_3,四级过审_4,审核通过_5"  queryMode="group"  width="120"></t:dgCol>
+   <t:dgCol title="审核状态"  field="checkStatus" align="center" replace="未审核_0,一级过审_1,二级过审_2,三级过审_3,四级过审_4,审核通过_5,申请被驳回_6"  queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="创建日期"  field="createDate" align="center" formatter="yyyy-MM-dd"  queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="创建人员主键"  field="createUserId" hidden="true" queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="创建人员名称"  field="createUserName" align="center" hidden="true" queryMode="group"  width="120"></t:dgCol>
