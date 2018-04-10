@@ -356,6 +356,7 @@ function doCheck(){
 		dataType:'json',
 		success:function(data){
 			alert(data.msg);
+			self.opener.location.reload();
 			frameElement.api.close();
 		}		
 	});  	
@@ -369,6 +370,7 @@ function doNotCheck(){
 		dataType:'json',
 		success:function(data){
 			alert(data.msg);
+			self.opener.location.reload();
 			frameElement.api.close();
 		}		
 	});  

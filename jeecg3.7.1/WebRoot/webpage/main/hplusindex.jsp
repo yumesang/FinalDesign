@@ -276,8 +276,8 @@
  	}
  	
  	function goAddTab(id,title){
- 		var str = "baseTableController.do?printView&id="+id;
-  		addOneTab(title, str);
+ 		var url = "detailTableController.do?goAdd&id="+id;
+  		openwindow(title, url,"dgList",1000,550);
  	}
 
  	function baseNews(){ 		

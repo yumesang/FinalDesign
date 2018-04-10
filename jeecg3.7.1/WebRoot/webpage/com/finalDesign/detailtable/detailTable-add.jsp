@@ -266,7 +266,6 @@
  	}
  	
  	for(var j=0;j<selfCheckBoxValue.length;j++){
-		 alert(lastName);
  		if(selfString == ""){
  			if(selfCheckBoxValue[j].checked == true){
  				selfString += "checkBox:"+selfCheckBoxValue[j].value;		
