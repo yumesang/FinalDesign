@@ -318,7 +318,7 @@ body{
 	    
 	     	<tr>
 		 	<td>		 
-		 		<div style="margin-left: 500px;">
+		 		<div style="margin-left: 350px;">
 		 			<input type=button class="subBtn" style="width: 80px;height: 30px;float:left;" value="通过" onclick="doCheck()" />
 		 			<input type=button class="subBtn" style="width: 80px;height: 30px;float:left;" value="驳回" onclick="doNotCheck()" />
 		 			<input type=button class="subBtn" style="width: 80px;height: 30px;float:left;" value="关闭" onclick="frameElement.api.close();" />
@@ -332,7 +332,7 @@ body{
 		  	 	</tr>
 		    </table>
 	     <div id="pcd_normal_div" style="width:98%;">
-		<table class="pcd_normal_tb" style="width:75%;" align="center">
+		<table class="pcd_normal_tb" style="width:98%;" align="center">
       		<tbody> 				
       			<c:if test="${smallStr.length() !=0 }">${smallStr }</c:if>
       			<c:if test="${normalStr.length() !=0 }">${normalStr }</c:if>

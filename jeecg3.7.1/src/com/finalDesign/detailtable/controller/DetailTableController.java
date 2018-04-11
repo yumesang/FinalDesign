@@ -296,7 +296,7 @@ public class DetailTableController extends BaseController {
 			FlowTaskInfoEntity flowTaskInfo = systemService.findUniqueByProperty(FlowTaskInfoEntity.class, "code", t.getId());
 			flowTaskInfo.setTaskName("您申请的《"+ listName +"》已通过审核!");
 			flowTaskInfo.setCheckStatus(Integer.parseInt(t.getCheckStatus()));
-			flowTaskInfo.setCeateUserId(t.getCreateUserId());
+			flowTaskInfo.setCheckUserId(t.getCreateUserId());
 			flowTaskInfo.setUrl(flowTaskInfo.getUrl().substring(0,flowTaskInfo.getUrl().length()-12));
 		}
 		try {	

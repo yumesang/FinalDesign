@@ -202,6 +202,53 @@ body{
     font-size: 15px;
     margin-top: 0px;
  }
+ 
+ .subBtn{
+  	border:none;
+	outline:none;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    color: #ffffff;
+    display: block;
+    cursor:pointer;
+    margin: 10px 5px;
+    float:center;
+    padding: 7px 17px;
+    text-shadow: 0 1px 1px #777;
+    font-weight:bold;
+    font-family:"Century Gothic", Helvetica, sans-serif;
+    -moz-box-shadow:0px 0px 3px #aaa;
+    -webkit-box-shadow:0px 0px 3px #aaa;
+    box-shadow:0px 0px 3px #aaa;
+    background:#18a689;
+    width: 50px;
+    height: 20px;
+    text-align: center;
+}
+	.clickedSubBtn{
+  	border:none;
+	outline:none;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    color: #ffffff;
+    display: block;
+    cursor:pointer;
+    margin: 10px 5px;
+    float:center;
+    padding: 7px 17px;
+    text-shadow: 0 1px 1px #777;
+    font-weight:bold;
+    font-family:"Century Gothic", Helvetica, sans-serif;
+    -moz-box-shadow:0px 0px 3px #aaa;
+    -webkit-box-shadow:0px 0px 3px #aaa;
+    box-shadow:0px 0px 3px #aaa;
+    background:gray;
+    width: 50px;
+    height: 20px;
+    text-align: center;
+}
 </style>
     <script type="text/javascript">
 	function printpreview1(){  //打印预览 (使用IE自带控件)
@@ -270,12 +317,13 @@ body{
 	    <br/><br/>
 	    <table style="width:85%;">
 		  	 	<tr class="pcd_normal_title">	
-<%-- 		  	 	    <td align="left" width="25%">申请人：${createPerson }</td>	 --%>	  
+<%-- 		  	 	    <td align="left" width="25%">申请人：${createPerson }</td>	 --%>	 
+ 
 		  	 		<td align="right" width="25%">制表时间：${createDate }</td>		  	 			  	 		
 		  	 	</tr>
 		    </table>
 	     <div id="pcd_normal_div" style="width:98%;">
-		<table class="pcd_normal_tb" style="width:75%;" align="center">
+		<table class="pcd_normal_tb" style="width:98%;" align="center">
       		<tbody> 				
       			<c:if test="${smallStr.length() !=0 }">${smallStr }</c:if>
       			<c:if test="${normalStr.length() !=0 }">${normalStr }</c:if>

@@ -87,6 +87,11 @@ public class DepartController extends BaseController {
 	public ModelAndView depart() {
 		return new ModelAndView("system/depart/departList");
 	}
+	
+	@RequestMapping(params = "selectDepart")
+	public ModelAndView selectDepart() {
+		return new ModelAndView("system/depart/selectDepart");
+	}
 
 	/**
 	 * easyuiAJAX请求数据
@@ -406,9 +411,16 @@ public class DepartController extends BaseController {
     public List<ComboTree> getOrgTree(HttpServletRequest request) {
 //        findHql不能处理is null条件
 //        List<TSDepart> departsList = systemService.findHql("from TSPDepart where TSPDepart.id is null");
-        List<TSDepart> departsList = systemService.findByQueryString("from TSDepart where TSPDepart.id is null");
+    	String departid=request.getParameter("departid");
+    	String sql="from TSDepart where TSPDepart.id is null";
+    	if(departid!=null&&!departid.isEmpty()){
+    		//sql="from TSDepart where id='"+departid+"'"+" or parentdepartid='"+departid+"'";
+			sql="from TSDepart where id='"+departid+"'";
+    	}
+        List<TSDepart> departsList = systemService.findByQueryString(sql);
         List<ComboTree> comboTrees = new ArrayList<ComboTree>();
-        ComboTreeModel comboTreeModel = new ComboTreeModel("id", "departname", "TSDeparts");
+       // ComboTreeModel comboTreeModel = new ComboTreeModel("id", "departname", "TSDeparts");
+        ComboTreeModel comboTreeModel = new ComboTreeModel("id", "departname", "TSDeparts");//orgCode
         comboTrees = systemService.ComboTree(departsList, comboTreeModel, null, true);
         return comboTrees;
     }

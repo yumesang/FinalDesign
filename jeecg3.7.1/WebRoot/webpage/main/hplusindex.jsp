@@ -323,7 +323,7 @@
 	
 	function showTaskInfoDetail(id,url){
 		var title = "审核";
-		openwindow(title, url,"dgList",1300,550);
+		openwindow(title, url,"dgList",1000,550);
 		$.ajax({success:function(data){$('#informList').datagrid('reload');}})  
 	}
 
