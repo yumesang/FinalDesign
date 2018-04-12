@@ -593,7 +593,7 @@ public class LoginController extends BaseController{
 		table.put("other", other);
 		
 		//备忘录
-		String notebookSql = "select t.task_name , t.target_date, t.id from notebook t where t.enable=0 order by target_date desc";
+		String notebookSql = "select t.task_name , t.target_date, t.id from notebook t where t.enable=0 and create_user_id = '"+ ResourceUtil.getSessionUser().getId() +"' order by target_date desc";
 		List<Object[]> notebookList = systemService.findListbySql(notebookSql);
 		String showNotebook = "<ol><li>";
 		for(int i = 0; i < notebookList.size(); i++){

@@ -108,6 +108,7 @@ public class NotebookController extends BaseController {
 	 */
 	@RequestMapping(params = "list")
 	public ModelAndView list(HttpServletRequest request) {
+		request.setAttribute("userId", ResourceUtil.getSessionUser().getId());
 		return new ModelAndView("com/finalDesign/notebook/notebookList");
 	}
 	

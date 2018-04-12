@@ -3,7 +3,7 @@
 <t:base type="jquery,easyui,tools,DatePicker"></t:base>
 <div class="easyui-layout" fit="true">
   <div region="center" style="padding:0px;border:0px">
-  <t:datagrid name="detailTableList" checkbox="true" pagination="true" fitColumns="true" title="detail_table" actionUrl="detailTableController.do?datagrid" idField="id" fit="true" queryMode="group">
+  <t:datagrid name="detailTableList" checkbox="true" pagination="true" fitColumns="true" title="detail_table" actionUrl="detailTableController.do?datagrid"  idField="id" fit="true" queryMode="group">
    <t:dgCol title="id"  field="id"  hidden="true"  queryMode="group"  width="120"></t:dgCol>
    <t:dgCol title="操作" align="center" field="opt" width="100"></t:dgCol>
    <t:dgDelOpt title="删除" url="detailTableController.do?doDel&id={id}" urlclass="ace_button" exp="checkStatus#eq#0" urlfont="fa-trash-o"/>
